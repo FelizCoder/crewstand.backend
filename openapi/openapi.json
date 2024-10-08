@@ -1,0 +1,518 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "swncrew backend",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/v1/actuators/": {
+      "get": {
+        "tags": [
+          "Actuators"
+        ],
+        "summary": "Get Actuators",
+        "operationId": "get_actuators_v1_actuators__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/SolenoidValve"
+                      },
+                      {
+                        "$ref": "#/components/schemas/ProportionalValve"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Pump"
+                      }
+                    ]
+                  },
+                  "type": "array",
+                  "title": "Response Get Actuators V1 Actuators  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/actuators/solenoid/": {
+      "get": {
+        "tags": [
+          "Actuators",
+          "Solenoid Valves"
+        ],
+        "summary": "Get All",
+        "operationId": "get_all_v1_actuators_solenoid__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SolenoidValve"
+                  },
+                  "type": "array",
+                  "title": "Response Get All V1 Actuators Solenoid  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/actuators/solenoid/{actuator_id}": {
+      "get": {
+        "tags": [
+          "Actuators",
+          "Solenoid Valves"
+        ],
+        "summary": "Get By Id",
+        "operationId": "get_by_id_v1_actuators_solenoid__actuator_id__get",
+        "parameters": [
+          {
+            "name": "actuator_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Actuator Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolenoidValve"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/actuators/solenoid/set": {
+      "post": {
+        "tags": [
+          "Actuators",
+          "Solenoid Valves"
+        ],
+        "summary": "Set State",
+        "operationId": "set_state_v1_actuators_solenoid_set_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolenoidValve"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolenoidValve"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/actuators/proportional/": {
+      "get": {
+        "tags": [
+          "Actuators",
+          "Proportional Valves"
+        ],
+        "summary": "Get All",
+        "operationId": "get_all_v1_actuators_proportional__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ProportionalValve"
+                  },
+                  "type": "array",
+                  "title": "Response Get All V1 Actuators Proportional  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/actuators/proportional/{actuator_id}": {
+      "get": {
+        "tags": [
+          "Actuators",
+          "Proportional Valves"
+        ],
+        "summary": "Get By Id",
+        "operationId": "get_by_id_v1_actuators_proportional__actuator_id__get",
+        "parameters": [
+          {
+            "name": "actuator_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Actuator Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProportionalValve"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/actuators/proportional/set": {
+      "post": {
+        "tags": [
+          "Actuators",
+          "Proportional Valves"
+        ],
+        "summary": "Set State",
+        "operationId": "set_state_v1_actuators_proportional_set_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProportionalValve"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProportionalValve"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/actuators/pump/": {
+      "get": {
+        "tags": [
+          "Actuators",
+          "Pumps"
+        ],
+        "summary": "Get All",
+        "operationId": "get_all_v1_actuators_pump__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Pump"
+                  },
+                  "type": "array",
+                  "title": "Response Get All V1 Actuators Pump  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/actuators/pump/{actuator_id}": {
+      "get": {
+        "tags": [
+          "Actuators",
+          "Pumps"
+        ],
+        "summary": "Get By Id",
+        "operationId": "get_by_id_v1_actuators_pump__actuator_id__get",
+        "parameters": [
+          {
+            "name": "actuator_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Actuator Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pump"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/actuators/pump/set": {
+      "post": {
+        "tags": [
+          "Actuators",
+          "Pumps"
+        ],
+        "summary": "Set State",
+        "operationId": "set_state_v1_actuators_pump_set_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pump"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pump"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActuatorEnum": {
+        "type": "string",
+        "enum": [
+          "solenoid valve",
+          "proportional valve",
+          "pump"
+        ],
+        "title": "ActuatorEnum"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ProportionalValve": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ActuatorEnum",
+            "default": "proportional valve"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "position"
+        ],
+        "title": "ProportionalValve"
+      },
+      "Pump": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ActuatorEnum",
+            "default": "pump"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "running": {
+            "type": "boolean",
+            "title": "Running"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "running"
+        ],
+        "title": "Pump"
+      },
+      "SolenoidValve": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ActuatorEnum",
+            "default": "solenoid valve"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "open": {
+            "type": "boolean",
+            "title": "Open"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "open"
+        ],
+        "title": "SolenoidValve"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
