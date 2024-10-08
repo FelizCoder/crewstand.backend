@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.1.0...v0.2.0) (2024-10-08)
+
+
+### Features
+
+* backend api implementation ([b1f81e3](https://github.com/FelizCoder/crewstand.backend/commit/b1f81e3febc2fc0967b784b79c086ad00ff54c85))
+* track openapi.json in git repository ([f0489b6](https://github.com/FelizCoder/crewstand.backend/commit/f0489b697ebde9b8a494536dea06aa13457caa38))
+* update FastAPI initialization with project name and version from config ([8add1a9](https://github.com/FelizCoder/crewstand.backend/commit/8add1a9a5e83e8afc544cbeca0674716369fc011))
+
 ## 0.1.0 (2024-10-03)
 
 
