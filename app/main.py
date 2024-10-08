@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from .api.v1.router import v1_router
+from .utils.config import config
 from pathlib import Path
 import json
 
-app = FastAPI(title="swncrew backend")
+app = FastAPI(title=config.PROJECT_NAME, version=config.VERSION)
 
 app.include_router(v1_router, prefix="/v1")
 
