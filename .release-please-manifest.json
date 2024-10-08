@@ -5,5 +5,6 @@
       "path": "openapi/openapi.json",
       "jsonpath": "$.info.version"
     }
-  ]
+  ],
+  ".": "0.2.0"
 }
