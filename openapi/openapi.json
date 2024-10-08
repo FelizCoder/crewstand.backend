@@ -10,8 +10,8 @@
         "tags": [
           "Actuators"
         ],
-        "summary": "Get Actuators",
-        "operationId": "get_actuators_v1_actuators__get",
+        "summary": "Get All",
+        "operationId": "get_all_v1_actuators__get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -32,7 +32,7 @@
                     ]
                   },
                   "type": "array",
-                  "title": "Response Get Actuators V1 Actuators  Get"
+                  "title": "Response Get All V1 Actuators  Get"
                 }
               }
             }
@@ -43,7 +43,6 @@
     "/v1/actuators/solenoid/": {
       "get": {
         "tags": [
-          "Actuators",
           "Solenoid Valves"
         ],
         "summary": "Get All",
@@ -69,7 +68,6 @@
     "/v1/actuators/solenoid/{actuator_id}": {
       "get": {
         "tags": [
-          "Actuators",
           "Solenoid Valves"
         ],
         "summary": "Get By Id",
@@ -112,7 +110,6 @@
     "/v1/actuators/solenoid/set": {
       "post": {
         "tags": [
-          "Actuators",
           "Solenoid Valves"
         ],
         "summary": "Set State",
@@ -154,7 +151,6 @@
     "/v1/actuators/proportional/": {
       "get": {
         "tags": [
-          "Actuators",
           "Proportional Valves"
         ],
         "summary": "Get All",
@@ -180,7 +176,6 @@
     "/v1/actuators/proportional/{actuator_id}": {
       "get": {
         "tags": [
-          "Actuators",
           "Proportional Valves"
         ],
         "summary": "Get By Id",
@@ -223,7 +218,6 @@
     "/v1/actuators/proportional/set": {
       "post": {
         "tags": [
-          "Actuators",
           "Proportional Valves"
         ],
         "summary": "Set State",
@@ -265,7 +259,6 @@
     "/v1/actuators/pump/": {
       "get": {
         "tags": [
-          "Actuators",
           "Pumps"
         ],
         "summary": "Get All",
@@ -291,7 +284,6 @@
     "/v1/actuators/pump/{actuator_id}": {
       "get": {
         "tags": [
-          "Actuators",
           "Pumps"
         ],
         "summary": "Get By Id",
@@ -334,7 +326,6 @@
     "/v1/actuators/pump/set": {
       "post": {
         "tags": [
-          "Actuators",
           "Pumps"
         ],
         "summary": "Set State",
