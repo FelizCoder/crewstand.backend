@@ -1,9 +1,14 @@
 {
-  "extra-files": [
-    {
-      "type": "json",
-      "path": "openapi/openapi.json",
-      "jsonpath": "$.info.version"
-    }
-  ]
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "openapi/openapi.json",
+          "jsonpath": "$.info.version"
+        }
+      ]
+        }
+  }
 }
