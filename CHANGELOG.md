@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/FelizCoder/crewstand.backend/compare/v0.1.0...v0.1.1) (2024-10-10)
+
+
+### Bug Fixes
+
+* **docker:** import version from repo ([e282566](https://github.com/FelizCoder/crewstand.backend/commit/e28256669c582ca734b2cbfc50fd84c3631ff001))
+
 ## [0.1.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.1.0...v0.1.0) (2024-10-08)
 
 
