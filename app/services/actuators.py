@@ -7,6 +7,7 @@ async def list_actuators() -> List[Union[SolenoidValve, ProportionalValve, Pump]
     logging.warning("This Service is not implemented yet")
     return [
         SolenoidValve(type=ActuatorEnum.SOLENOID ,id=0, open=False),
+        SolenoidValve(type=ActuatorEnum.SOLENOID ,id=1, open=True),
         ProportionalValve(type=ActuatorEnum.PROPORTIONAL ,id=0, position=0),
         Pump(type=ActuatorEnum.PUMP ,id=0, running=False),
     ]
