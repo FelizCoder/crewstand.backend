@@ -7,8 +7,9 @@ COPY ./requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./app /code/app
+COPY ./version.txt .
 
-CMD ["fastapi", "run", "app/main.py", "--port", "80"]
+CMD ["fastapi", "run", "app/main.py", "--port", "5000"]
 
 # If running behind a proxy like Nginx or Traefik add --proxy-headers
 # CMD ["fastapi", "run", "app/main.py", "--port", "80", "--proxy-headers"]
