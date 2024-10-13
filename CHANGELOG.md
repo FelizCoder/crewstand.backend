@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.1.1...v0.2.0) (2024-10-13)
+
+
+### Features
+
+* **actuators:** mock services in actuator module ([ddb4f33](https://github.com/FelizCoder/crewstand.backend/commit/ddb4f330315e370ea42bb0a38873fc2cbd3c992e))
+
 ## [0.1.1](https://github.com/FelizCoder/crewstand.backend/compare/v0.1.0...v0.1.1) (2024-10-10)
 
 
