@@ -1,6 +1,6 @@
 # app/api/v1/endpoints/actuators.py
 from typing import List, Union
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
 from app.models.actuators import SolenoidValve, ProportionalValve, Pump
 from app.services.actuators import ActuatorService, list_actuators
@@ -19,7 +19,7 @@ async def get_all() -> List[Union[SolenoidValve, ProportionalValve, Pump]]:
     actuators = await list_actuators()
     return actuators
 
-def create_router(service):
+def create_actuator_router(service: ActuatorService):
     r = APIRouter()
 
     @r.get("/", response_model=List[service.item_type])  # Update this with your service's item type
@@ -37,6 +37,6 @@ def create_router(service):
     return r
 
 # Import routers using the create_router function
-router.include_router(create_router(solenoid_service), prefix="/solenoid", tags=["Solenoid Valves"])
-router.include_router(create_router(proportional_service), prefix="/proportional", tags=["Proportional Valves"])
-router.include_router(create_router(pump_service), prefix="/pump", tags=["Pumps"])
+router.include_router(create_actuator_router(solenoid_service), prefix="/solenoid", tags=["Solenoid Valves"])
+router.include_router(create_actuator_router(proportional_service), prefix="/proportional", tags=["Proportional Valves"])
+router.include_router(create_actuator_router(pump_service), prefix="/pump", tags=["Pumps"])
