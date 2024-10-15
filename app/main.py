@@ -1,6 +1,8 @@
 from fastapi import FastAPI
+from gpiozero import Device
 from .api.v1.router import v1_router
 from .utils.config import settings
+from .utils.logger import logger
 from pathlib import Path
 import json
 
@@ -22,3 +24,8 @@ openapi_output_path.parent.mkdir(parents=True, exist_ok=True)
 async def generate_openapi():
     openapi = app.openapi()
     openapi_output_path.write_text(json.dumps(openapi, indent=2))
+    
+@app.on_event("shutdown")
+async def shutdown_event():
+    logger.info("Shutting down...")
+    Device.close()
