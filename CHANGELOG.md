@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.2.0...v0.3.0) (2024-10-15)
+
+
+### Features
+
+* **actuators:** Add GPIO Control ([e313c45](https://github.com/FelizCoder/crewstand.backend/commit/e313c450f182ded8561320f462b506f451127fb2))
+* add GPIO configuration ([c1c496e](https://github.com/FelizCoder/crewstand.backend/commit/c1c496ed79f0bcfd4c6be8e0fa2c52ad3f8636b2))
+* **api:** enhanced input validation ([6a8e694](https://github.com/FelizCoder/crewstand.backend/commit/6a8e694e371725a4c9628fcec7e7007a24dc50e0))
+* enhanced logging ([cbd72f6](https://github.com/FelizCoder/crewstand.backend/commit/cbd72f6809a413d6202cc37d1d2d6a39e19ea291))
+* **GPIO:** add shutdown event to gracefully handle GPIO device closure ([7c5663e](https://github.com/FelizCoder/crewstand.backend/commit/7c5663e20f50726294989f28b79c2161c7551da4))
+
 ## [0.2.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.1.1...v0.2.0) (2024-10-13)
 
 
