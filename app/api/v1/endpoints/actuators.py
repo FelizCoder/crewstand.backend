@@ -1,6 +1,6 @@
 # app/api/v1/endpoints/actuators.py
-from typing import List, Union
-from fastapi import APIRouter
+from typing import Annotated, List, Union
+from fastapi import APIRouter, Path
 
 from app.models.actuators import SolenoidValve, ProportionalValve, Pump
 from app.services.actuators import ActuatorService, list_actuators
@@ -23,16 +23,16 @@ def create_actuator_router(service: ActuatorService):
     r = APIRouter()
 
     @r.get("/", response_model=List[service.item_type])  # Update this with your service's item type
-    async def get_all():
-        return await service.list_actuators()
+    def get_all():
+        return service.get_all()
 
     @r.get("/{actuator_id}", response_model=service.item_type)
-    async def get_by_id(actuator_id: int):
-        return await service.get_by_id(actuator_id)
+    def get_by_id(actuator_id: Annotated[int, Path(..., ge=0, lt=service.actuator.count)]):
+        return service.get_by_id(actuator_id)
 
     @r.post("/set", response_model=service.item_type)
-    async def set_state(actuator: service.item_type):
-        return await service.set_state(actuator)
+    def set_state(actuator: service.item_type):
+        return service.set_state(actuator)
 
     return r
 
