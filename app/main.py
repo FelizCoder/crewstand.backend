@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from .api.v1.router import v1_router
-from .utils.config import config
+from .utils.config import settings
 from pathlib import Path
 import json
 
-app = FastAPI(title=config.PROJECT_NAME, version=config.VERSION)
+app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
 
 app.include_router(v1_router, prefix="/v1")
 
