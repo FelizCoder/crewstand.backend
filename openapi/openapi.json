@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "swncrew backend",
+    "title": "swn crew backend",
     "version": "0.2.0"
   },
   "paths": {
@@ -79,6 +79,8 @@
             "required": true,
             "schema": {
               "type": "integer",
+              "minimum": 0,
+              "exclusiveMaximum": 3,
               "title": "Actuator Id"
             }
           }
@@ -187,6 +189,8 @@
             "required": true,
             "schema": {
               "type": "integer",
+              "minimum": 0,
+              "exclusiveMaximum": 2,
               "title": "Actuator Id"
             }
           }
@@ -295,6 +299,8 @@
             "required": true,
             "schema": {
               "type": "integer",
+              "minimum": 0,
+              "exclusiveMaximum": 4,
               "title": "Actuator Id"
             }
           }
@@ -413,10 +419,18 @@
           },
           "id": {
             "type": "integer",
-            "title": "Id"
+            "minimum": -1.0,
+            "title": "Id",
+            "examples": [
+              0,
+              1,
+              2
+            ]
           },
           "position": {
             "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
             "title": "Position"
           }
         },
@@ -435,7 +449,13 @@
           },
           "id": {
             "type": "integer",
-            "title": "Id"
+            "minimum": -1.0,
+            "title": "Id",
+            "examples": [
+              0,
+              1,
+              2
+            ]
           },
           "running": {
             "type": "boolean",
@@ -457,7 +477,13 @@
           },
           "id": {
             "type": "integer",
-            "title": "Id"
+            "minimum": -1.0,
+            "title": "Id",
+            "examples": [
+              0,
+              1,
+              2
+            ]
           },
           "open": {
             "type": "boolean",
