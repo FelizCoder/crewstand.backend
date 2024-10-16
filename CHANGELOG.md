@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.3.0...v0.4.0) (2024-10-16)
+
+
+### Features
+
+* update actuator API to use service methods ([1cf82c7](https://github.com/FelizCoder/crewstand.backend/commit/1cf82c7705afcb0d45f2d6261d6b265bb97f69d2))
+
+
+### Bug Fixes
+
+* update configuration and fix type errors ([a2ad70b](https://github.com/FelizCoder/crewstand.backend/commit/a2ad70b47a49d094f8345e4c09fb92d7f4748c87))
+
 ## [0.3.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.2.0...v0.3.0) (2024-10-15)
 
 
