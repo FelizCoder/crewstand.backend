@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "swn crew backend",
+    "title": "swncrew backend",
     "version": "0.3.0"
   },
   "paths": {
@@ -419,7 +419,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -429,8 +429,8 @@
           },
           "position": {
             "type": "integer",
-            "maximum": 100,
-            "minimum": 0,
+            "maximum": 100.0,
+            "minimum": 0.0,
             "title": "Position"
           }
         },
@@ -449,7 +449,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -477,7 +477,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,

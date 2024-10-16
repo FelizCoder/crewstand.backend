@@ -15,8 +15,8 @@ proportional_service = ProportionalService()
 pump_service = PumpService()
 
 @router.get("/", tags=["Actuators"])
-async def get_all() -> List[Union[SolenoidValve, ProportionalValve, Pump]]:
-    actuators = await list_actuators()
+def get_all() -> List[Union[SolenoidValve, ProportionalValve, Pump]]:
+    actuators = solenoid_service.get_all() + proportional_service.get_all() + pump_service.get_all()    
     return actuators
 
 def create_actuator_router(service: ActuatorService):
