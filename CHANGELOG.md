@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/FelizCoder/crewstand.backend/compare/v0.4.0...v0.4.1) (2024-10-16)
+
+
+### Bug Fixes
+
+* **deps:** add additional GPIO libraries to requirements ([f7b185d](https://github.com/FelizCoder/crewstand.backend/commit/f7b185d4a5da987459109798518684b4248dd939))
+
 ## [0.4.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.3.0...v0.4.0) (2024-10-16)
 
 
