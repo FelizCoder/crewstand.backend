@@ -28,4 +28,5 @@ async def generate_openapi():
 @app.on_event("shutdown")
 async def shutdown_event():
     logger.info("Shutting down...")
-    Device.close()
+    # Close the GPIO device when the application shuts down
+    settings.DEVICE.close()
