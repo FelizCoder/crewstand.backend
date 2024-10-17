@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/FelizCoder/crewstand.backend/compare/v0.4.1...v0.4.2) (2024-10-17)
+
+
+### Bug Fixes
+
+* **gpio:** GPIO close on graceful shutdown ([8cf8fdb](https://github.com/FelizCoder/crewstand.backend/commit/8cf8fdbb85529745c1699d346f62a3d84a78d567)), closes [#29](https://github.com/FelizCoder/crewstand.backend/issues/29)
+
 ## [0.4.1](https://github.com/FelizCoder/crewstand.backend/compare/v0.4.0...v0.4.1) (2024-10-16)
 
 
