@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from gpiozero import Device
+from fastapi.responses import FileResponse
 from .api.v1.router import v1_router
 from .utils.config import settings
 from .utils.logger import logger
@@ -13,6 +13,10 @@ app.include_router(v1_router, prefix="/v1")
 @app.get("/")
 async def root():
     return {"message": "Hello World. This is the swncrew backend"}
+
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+    return FileResponse('app/utils/favicon.ico')
 
 # Auto generate OpenAPI spec output
 openapi_output_path = Path("./openapi/openapi.json")
