@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.4.2...v0.5.0) (2024-10-22)
+
+
+### Features
+
+* add favicon endpoint and ([a9f13a3](https://github.com/FelizCoder/crewstand.backend/commit/a9f13a304d871a9aca45ebd0ada5b4742093a299))
+
 ## [0.4.2](https://github.com/FelizCoder/crewstand.backend/compare/v0.4.1...v0.4.2) (2024-10-17)
 
 
