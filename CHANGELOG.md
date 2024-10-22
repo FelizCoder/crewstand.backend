@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/FelizCoder/crewstand.backend/compare/v0.5.0...v0.5.1) (2024-10-22)
+
+
+### Bug Fixes
+
+* **icon:** Icon for swagger docs ([f81c005](https://github.com/FelizCoder/crewstand.backend/commit/f81c0050b373c73c02116ae075c9565f5102afd4))
+
 ## [0.5.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.4.2...v0.5.0) (2024-10-22)
 
 
