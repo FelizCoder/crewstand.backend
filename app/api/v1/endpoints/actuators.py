@@ -3,7 +3,7 @@ from typing import Annotated, List, Union
 from fastapi import APIRouter, Path
 
 from app.models.actuators import SolenoidValve, ProportionalValve, Pump
-from app.services.actuators import ActuatorService, list_actuators
+from app.services.actuators import ActuatorService
 from app.services.solenoid import SolenoidService
 from app.services.proportional import ProportionalService
 from app.services.pump import PumpService
@@ -14,29 +14,87 @@ solenoid_service = SolenoidService()
 proportional_service = ProportionalService()
 pump_service = PumpService()
 
+
 @router.get("/", tags=["Actuators"])
 def get_all() -> List[Union[SolenoidValve, ProportionalValve, Pump]]:
-    actuators = solenoid_service.get_all() + proportional_service.get_all() + pump_service.get_all()    
+    """
+    Retrieve a list of all actuators, including solenoid valves, proportional valves, and pumps.
+
+    Returns:
+        List[Union[SolenoidValve, ProportionalValve, Pump]]: A list containing all the actuators.
+    """
+    actuators = (
+        solenoid_service.get_all()
+        + proportional_service.get_all()
+        + pump_service.get_all()
+    )
     return actuators
 
+
 def create_actuator_router(service: ActuatorService):
+    """
+    Creates a router for the specified actuator service.
+
+    Args:
+        service (ActuatorService): The service that handles the specific type of actuator.
+
+    Returns:
+        APIRouter: A FastAPI router configured for the actuator service.
+    """
     r = APIRouter()
 
-    @r.get("/", response_model=List[service.item_type])  # Update this with your service's item type
+    @r.get("/", response_model=List[service.item_type])
     def get_all():
+        """
+        Retrieve all actuators of a specific type.
+
+        Returns:
+            List[service.item_type]: A list of actuators of the specified type.
+        """
         return service.get_all()
 
     @r.get("/{actuator_id}", response_model=service.item_type)
-    def get_by_id(actuator_id: Annotated[int, Path(..., ge=0, lt=service.actuator.count)]):
+    def get_by_id(
+        actuator_id: Annotated[int, Path(..., ge=0, lt=service.actuator.count)]
+    ):
+        """
+        Retrieve a specific actuator by its ID.
+
+        Args:
+            actuator_id (int): The ID of the actuator to retrieve.
+
+        Returns:
+            service.item_type: The actuator object with the specified ID.
+        """
         return service.get_by_id(actuator_id)
 
     @r.post("/set", response_model=service.item_type)
     def set_state(actuator: service.item_type):
+        """
+        Set the state of a specific actuator.
+
+        Args:
+            actuator (service.item_type): The actuator object with the state to be set.
+
+        Returns:
+            service.item_type: The actuator object after its state has been updated.
+        """
         return service.set_state(actuator)
 
     return r
 
+
 # Import routers using the create_router function
-router.include_router(create_actuator_router(solenoid_service), prefix="/solenoid", tags=["Solenoid Valves"])
-router.include_router(create_actuator_router(proportional_service), prefix="/proportional", tags=["Proportional Valves"])
-router.include_router(create_actuator_router(pump_service), prefix="/pump", tags=["Pumps"])
+router.include_router(
+    create_actuator_router(solenoid_service),
+    prefix="/solenoid",
+    tags=["Solenoid Valves"],
+)
+router.include_router(
+    create_actuator_router(proportional_service),
+    prefix="/proportional",
+    tags=["Proportional Valves"],
+)
+router.include_router(
+    create_actuator_router(pump_service), prefix="/pump", tags=["Pumps"]
+)
