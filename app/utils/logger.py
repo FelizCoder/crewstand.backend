@@ -1,26 +1,28 @@
 import logging
 
+
 class CustomFormatter(logging.Formatter):
     """
     This is a custom logging formatter, it allows to change how logs are displayed
-    """ 
+    """
+
     # ANSI escape codes for formatting logs in different colors
     grey = "\x1b[38;20m"
-    blue = '\x1b[38;5;39m'
+    blue = "\x1b[38;5;39m"
     yellow = "\x1b[33;20m"
     red = "\x1b[31;20m"
     bold_red = "\x1b[31;1m"
     reset = "\x1b[0m"
     # This is the basic format for logging messages
-    format = "%(levelname)s: %(message)s"
+    line_format = "%(levelname)s: %(message)s"
 
     # This dictionary defines the formats for different log levels
     FORMATS = {
-        logging.DEBUG: blue + format + reset,
-        logging.INFO: grey + format + reset,
-        logging.WARNING: yellow + format + reset,
-        logging.ERROR: red + format + reset,
-        logging.CRITICAL: bold_red + format + reset
+        logging.DEBUG: blue + line_format + reset,
+        logging.INFO: grey + line_format + reset,
+        logging.WARNING: yellow + line_format + reset,
+        logging.ERROR: red + line_format + reset,
+        logging.CRITICAL: bold_red + line_format + reset,
     }
 
     def format(self, record):
@@ -35,6 +37,7 @@ class CustomFormatter(logging.Formatter):
         log_fmt = self.FORMATS.get(record.levelno)
         formatter = logging.Formatter(log_fmt)
         return formatter.format(record)
+
 
 # Create the main logger
 logger = logging.getLogger()

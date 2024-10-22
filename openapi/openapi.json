@@ -11,6 +11,7 @@
           "Actuators"
         ],
         "summary": "Get All",
+        "description": "Retrieve a list of all actuators, including solenoid valves, proportional valves, and pumps.\n\nReturns:\n    List[Union[SolenoidValve, ProportionalValve, Pump]]: A list containing all the actuators.",
         "operationId": "get_all_v1_actuators__get",
         "responses": {
           "200": {
@@ -46,6 +47,7 @@
           "Solenoid Valves"
         ],
         "summary": "Get All",
+        "description": "Retrieve all actuators of a specific type.\n\nReturns:\n    List[service.item_type]: A list of actuators of the specified type.",
         "operationId": "get_all_v1_actuators_solenoid__get",
         "responses": {
           "200": {
@@ -71,6 +73,7 @@
           "Solenoid Valves"
         ],
         "summary": "Get By Id",
+        "description": "Retrieve a specific actuator by its ID.\n\nArgs:\n    actuator_id (int): The ID of the actuator to retrieve.\n\nReturns:\n    service.item_type: The actuator object with the specified ID.",
         "operationId": "get_by_id_v1_actuators_solenoid__actuator_id__get",
         "parameters": [
           {
@@ -115,6 +118,7 @@
           "Solenoid Valves"
         ],
         "summary": "Set State",
+        "description": "Set the state of a specific actuator.\n\nArgs:\n    actuator (service.item_type): The actuator object with the state to be set.\n\nReturns:\n    service.item_type: The actuator object after its state has been updated.",
         "operationId": "set_state_v1_actuators_solenoid_set_post",
         "requestBody": {
           "content": {
@@ -156,6 +160,7 @@
           "Proportional Valves"
         ],
         "summary": "Get All",
+        "description": "Retrieve all actuators of a specific type.\n\nReturns:\n    List[service.item_type]: A list of actuators of the specified type.",
         "operationId": "get_all_v1_actuators_proportional__get",
         "responses": {
           "200": {
@@ -181,6 +186,7 @@
           "Proportional Valves"
         ],
         "summary": "Get By Id",
+        "description": "Retrieve a specific actuator by its ID.\n\nArgs:\n    actuator_id (int): The ID of the actuator to retrieve.\n\nReturns:\n    service.item_type: The actuator object with the specified ID.",
         "operationId": "get_by_id_v1_actuators_proportional__actuator_id__get",
         "parameters": [
           {
@@ -190,7 +196,7 @@
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "exclusiveMaximum": 2,
+              "exclusiveMaximum": 1,
               "title": "Actuator Id"
             }
           }
@@ -225,6 +231,7 @@
           "Proportional Valves"
         ],
         "summary": "Set State",
+        "description": "Set the state of a specific actuator.\n\nArgs:\n    actuator (service.item_type): The actuator object with the state to be set.\n\nReturns:\n    service.item_type: The actuator object after its state has been updated.",
         "operationId": "set_state_v1_actuators_proportional_set_post",
         "requestBody": {
           "content": {
@@ -266,6 +273,7 @@
           "Pumps"
         ],
         "summary": "Get All",
+        "description": "Retrieve all actuators of a specific type.\n\nReturns:\n    List[service.item_type]: A list of actuators of the specified type.",
         "operationId": "get_all_v1_actuators_pump__get",
         "responses": {
           "200": {
@@ -291,6 +299,7 @@
           "Pumps"
         ],
         "summary": "Get By Id",
+        "description": "Retrieve a specific actuator by its ID.\n\nArgs:\n    actuator_id (int): The ID of the actuator to retrieve.\n\nReturns:\n    service.item_type: The actuator object with the specified ID.",
         "operationId": "get_by_id_v1_actuators_pump__actuator_id__get",
         "parameters": [
           {
@@ -300,7 +309,7 @@
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "exclusiveMaximum": 4,
+              "exclusiveMaximum": 1,
               "title": "Actuator Id"
             }
           }
@@ -335,6 +344,7 @@
           "Pumps"
         ],
         "summary": "Set State",
+        "description": "Set the state of a specific actuator.\n\nArgs:\n    actuator (service.item_type): The actuator object with the state to be set.\n\nReturns:\n    service.item_type: The actuator object after its state has been updated.",
         "operationId": "set_state_v1_actuators_pump_set_post",
         "requestBody": {
           "content": {
@@ -373,6 +383,7 @@
     "/": {
       "get": {
         "summary": "Root",
+        "description": "Returns a simple greeting message.\n\nReturns:\n    dict: A dictionary containing a single key-value pair with the message.",
         "operationId": "root__get",
         "responses": {
           "200": {
@@ -396,7 +407,8 @@
           "proportional valve",
           "pump"
         ],
-        "title": "ActuatorEnum"
+        "title": "ActuatorEnum",
+        "description": "Enumeration for different types of actuators."
       },
       "HTTPValidationError": {
         "properties": {
@@ -419,7 +431,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -429,8 +441,8 @@
           },
           "position": {
             "type": "integer",
-            "maximum": 100,
-            "minimum": 0,
+            "maximum": 100.0,
+            "minimum": 0.0,
             "title": "Position"
           }
         },
@@ -439,7 +451,8 @@
           "id",
           "position"
         ],
-        "title": "ProportionalValve"
+        "title": "ProportionalValve",
+        "description": "Model representing a proportional valve actuator."
       },
       "Pump": {
         "properties": {
@@ -449,7 +462,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -467,7 +480,8 @@
           "id",
           "running"
         ],
-        "title": "Pump"
+        "title": "Pump",
+        "description": "Model representing a pump actuator."
       },
       "SolenoidValve": {
         "properties": {
@@ -477,7 +491,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -495,7 +509,8 @@
           "id",
           "open"
         ],
-        "title": "SolenoidValve"
+        "title": "SolenoidValve",
+        "description": "Model representing a solenoid valve actuator."
       },
       "ValidationError": {
         "properties": {
