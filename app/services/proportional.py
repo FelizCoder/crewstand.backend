@@ -1,6 +1,12 @@
 from app.models.actuators import ProportionalValve
-from app.repositories.GPIO.proportional_valves import ProportionalActuator
+from app.utils.config import settings
 from app.services.actuators import ActuatorService
+
+match settings.PROPORTIONAL_MODE:
+    case "GPIO":
+        from app.repositories.GPIO.proportional_valves import ProportionalActuator
+    case "CAN":
+        from app.repositories.CAN.proportional_valves import ProportionalActuator
 
 
 class ProportionalService(ActuatorService[ProportionalValve]):
