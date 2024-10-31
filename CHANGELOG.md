@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.5.1...v0.6.0) (2024-10-31)
+
+
+### Features
+
+* **can:** implement repository for opencan proportional valve ([69e8030](https://github.com/FelizCoder/crewstand.backend/commit/69e8030ff684374b8589716151be87c6e5786564)), closes [#40](https://github.com/FelizCoder/crewstand.backend/issues/40)
+* **shutdown:** add shutdown event handling and logging for proportional service and GPIO device ([baf149c](https://github.com/FelizCoder/crewstand.backend/commit/baf149cb7651fdea7c2a4f2a390a73cab2714bed))
+
 ## [0.5.1](https://github.com/FelizCoder/crewstand.backend/compare/v0.5.0...v0.5.1) (2024-10-22)
 
 
