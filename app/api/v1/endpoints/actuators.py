@@ -7,6 +7,8 @@ from app.services.actuators import ActuatorService
 from app.services.solenoid import SolenoidService
 from app.services.proportional import ProportionalService
 from app.services.pump import PumpService
+from app.utils.logger import logger
+from app.utils.config import settings
 
 router = APIRouter()
 
@@ -98,3 +100,19 @@ router.include_router(
 router.include_router(
     create_actuator_router(pump_service), prefix="/pump", tags=["Pumps"]
 )
+
+
+def shutdown_event():
+    """
+    Shuts down the proportional service and closes the GPIO device when the application is shutting down.
+    """
+
+    logger.debug("Shutting down proportional service")
+    proportional_service.disconnect()
+
+    # Close the GPIO device when the application shuts down
+    settings.DEVICE.close()
+    logger.info("GPIO device closed")
+
+
+router.on_shutdown = [shutdown_event]

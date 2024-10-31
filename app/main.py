@@ -69,14 +69,3 @@ async def generate_openapi():
     """
     openapi = app.openapi()
     openapi_output_path.write_text(json.dumps(openapi, indent=2), encoding="utf-8")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """
-    Logs a shutdown message when the application is shutting down.
-    Close the GPIO device when the application shuts down
-    """
-    logger.info("Shutting down...")
-    # Close the GPIO device when the application shuts down
-    settings.DEVICE.close()

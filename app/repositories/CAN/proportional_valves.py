@@ -149,6 +149,6 @@ class ProportionalActuator(ActuatorRepository):
         """
 
         self.node.nmt.state = "PRE-OPERATIONAL"  # Deactivate the node
-        logger.debug(f"Node {self.node.id} set PRE-OPERATIONAL")
+        logger.info(f"Node {self.node.id} set PRE-OPERATIONAL")
         self.network.disconnect()
-        logger.debug(f"Disconnected from CANopen Network")
+        logger.info("Disconnected from CANopen Network")

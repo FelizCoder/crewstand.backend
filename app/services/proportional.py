@@ -20,3 +20,12 @@ class ProportionalService(ActuatorService[ProportionalValve]):
     def __init__(self):
         actuator_repository = ProportionalActuator()
         super().__init__(actuator_repository, ProportionalValve)
+
+    def disconnect(self) -> None:
+        """Disconnect from the service.
+
+        This method will terminate the connection to the service,
+        freeing up resources and resetting the object to a state as if
+        it had just been instantiated.
+
+        """
