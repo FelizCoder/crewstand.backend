@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Literal, Union
 from gpiozero import Device
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -14,15 +14,17 @@ def read_version():
 class Config(BaseSettings):
     """Holds configuration settings for the project."""
 
-    PROJECT_NAME: str = "swncrew backend"
-    VERSION: str = read_version()
-    GPIOZERO_PIN_FACTORY: Union[str, None] = None
-    SOLENOID_GPIO: str
-    PROPORTIONAL_GPIO: str
-    PUMP_GPIO: str
     DEBUG_LEVEL: str = "INFO"
-    GPIO_MODE: str = ""
     DEVICE: Union[Device, None] = None
+    GPIO_MODE: str = ""
+    GPIOZERO_PIN_FACTORY: Union[str, None] = None
+    PROJECT_NAME: str = "swncrew backend"
+    PROPORTIONAL_CAN_INTERFACE: str = "can0"
+    PROPORTIONAL_GPIO: Union[str, None] = None
+    PROPORTIONAL_MODE: Literal["GPIO", "CAN"]
+    PUMP_GPIO: str
+    SOLENOID_GPIO: str
+    VERSION: str = read_version()
 
     model_config = SettingsConfigDict(env_file=".env.local")
 
