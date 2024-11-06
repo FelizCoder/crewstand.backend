@@ -75,6 +75,9 @@ class ProportionalActuator(ActuatorRepository):
     """
 
     def __init__(self):
+        self.count = 1  # Only the default setting for one Bürkert MotorValve 3280 is supported at the moment
+        self.item_type = ProportionalValve
+
         current_file_directory = os.path.dirname(os.path.abspath(__file__))
         eds_file = os.path.join(
             current_file_directory,
@@ -82,7 +85,6 @@ class ProportionalActuator(ActuatorRepository):
             "Buerkert-MotorValve3280_CANopen_1.16-20240112.eds",
         )
 
-        self.count = 1  # Only the default setting for one Bürkert MotorValve 3280 is supported at the moment
         #  Connect to the CANopen Network
         self.network = canopen.Network()
         self.network.connect(

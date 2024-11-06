@@ -1,6 +1,6 @@
 from app.models.actuators import SolenoidValve
-from app.repositories.GPIO.solenoid_valves import SolenoidActuator
-from app.services.actuators import ActuatorService
+from app.repositories.actuators.GPIO.solenoid_valves import SolenoidActuator
+from app.services.actuators.service import ActuatorService
 
 
 class SolenoidService(ActuatorService[SolenoidValve]):

@@ -1,6 +1,6 @@
 from app.models.actuators import Pump
-from app.repositories.GPIO.pumps import PumpActuator
-from app.services.actuators import ActuatorService
+from app.repositories.actuators.GPIO.pumps import PumpActuator
+from app.services.actuators.service import ActuatorService
 
 
 class PumpService(ActuatorService[Pump]):

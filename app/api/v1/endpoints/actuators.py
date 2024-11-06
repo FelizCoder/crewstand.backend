@@ -3,10 +3,10 @@ from typing import Annotated, List, Union
 from fastapi import APIRouter, Path
 
 from app.models.actuators import SolenoidValve, ProportionalValve, Pump
-from app.services.actuators import ActuatorService
-from app.services.solenoid import SolenoidService
-from app.services.proportional import ProportionalService
-from app.services.pump import PumpService
+from app.services.actuators.proportional import ProportionalService
+from app.services.actuators.pump import PumpService
+from app.services.actuators.service import ActuatorService
+from app.services.actuators.solenoid import SolenoidService
 from app.utils.logger import logger
 from app.utils.config import settings
 
