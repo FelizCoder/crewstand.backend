@@ -5,9 +5,9 @@ from fastapi.testclient import TestClient
 from fastapi.exceptions import RequestValidationError
 from app.api.v1.endpoints.actuators import router
 from app.models.actuators import ProportionalValve, Pump, SolenoidValve
-from app.services.proportional import ProportionalService
-from app.services.pump import PumpService
-from app.services.solenoid import SolenoidService
+from app.services.actuators.proportional import ProportionalService
+from app.services.actuators.pump import PumpService
+from app.services.actuators.solenoid import SolenoidService
 
 
 @pytest.fixture(name="client")
