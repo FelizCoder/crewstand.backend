@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "swncrew backend",
+    "title": "swn crew backend",
     "version": "0.6.0"
   },
   "paths": {
@@ -10,9 +10,9 @@
         "tags": [
           "Actuators"
         ],
-        "summary": "Get All",
+        "summary": "Get All Actuators",
         "description": "Retrieve a list of all actuators, including solenoid valves, proportional valves, and pumps.\n\nReturns:\n    List[Union[SolenoidValve, ProportionalValve, Pump]]: A list containing all the actuators.",
-        "operationId": "get_all_v1_actuators__get",
+        "operationId": "get_all_actuators_v1_actuators__get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -33,7 +33,7 @@
                     ]
                   },
                   "type": "array",
-                  "title": "Response Get All V1 Actuators  Get"
+                  "title": "Response Get All Actuators V1 Actuators  Get"
                 }
               }
             }
@@ -83,7 +83,7 @@
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "exclusiveMaximum": 3,
+              "exclusiveMaximum": 4,
               "title": "Actuator Id"
             }
           }
@@ -196,7 +196,7 @@
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "exclusiveMaximum": 1,
+              "exclusiveMaximum": 2,
               "title": "Actuator Id"
             }
           }
@@ -309,7 +309,7 @@
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "exclusiveMaximum": 1,
+              "exclusiveMaximum": 2,
               "title": "Actuator Id"
             }
           }
@@ -380,6 +380,158 @@
         }
       }
     },
+    "/v1/sensors/": {
+      "get": {
+        "tags": [
+          "Sensors"
+        ],
+        "summary": "Get All Sensors",
+        "description": "Retrieve a list of all sensors, including flowmeters.\n\nReturns:\n    List[Union[Flowmeter]]: A list containing all the sensors.",
+        "operationId": "get_all_sensors_v1_sensors__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Flowmeter"
+                  },
+                  "type": "array",
+                  "title": "Response Get All Sensors V1 Sensors  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sensors/flowmeters/": {
+      "get": {
+        "tags": [
+          "Flowmeters"
+        ],
+        "summary": "Get All",
+        "description": "Retrieve all sensors of a specific type.\n\nReturns:\n    List[service.item_type]: A list of sensors of the specified type.",
+        "operationId": "get_all_v1_sensors_flowmeters__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Flowmeter"
+                  },
+                  "type": "array",
+                  "title": "Response Get All V1 Sensors Flowmeters  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sensors/flowmeters/{sensor_id}": {
+      "get": {
+        "tags": [
+          "Flowmeters"
+        ],
+        "summary": "Get By Id",
+        "description": "Retrieve a specific sensor by its ID.\n\nArgs:\n    sensor_id (int): The ID of the sensor to retrieve.\n\nReturns:\n    service.item_type: The sensor object with the specified ID.",
+        "operationId": "get_by_id_v1_sensors_flowmeters__sensor_id__get",
+        "parameters": [
+          {
+            "name": "sensor_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "exclusiveMaximum": 1,
+              "title": "Sensor Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flowmeter"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sensors/flowmeters/{sensor_id}/readings": {
+      "post": {
+        "tags": [
+          "Flowmeters"
+        ],
+        "summary": "Post Reading",
+        "description": "Post a new reading for a specific sensor.\n\nArgs:\n    sensor_id (int): The ID of the sensor.\n    reading (SensorReading): The new reading to update.\n\nReturns:\n    service.item_type: The updated sensor object.",
+        "operationId": "post_reading_v1_sensors_flowmeters__sensor_id__readings_post",
+        "parameters": [
+          {
+            "name": "sensor_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "exclusiveMaximum": 1,
+              "title": "Sensor Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SensorReading"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Flowmeter"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "summary": "Root",
@@ -410,6 +562,45 @@
         "title": "ActuatorEnum",
         "description": "Enumeration for different types of actuators."
       },
+      "Flowmeter": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/SensorEnum",
+            "default": "flowmeter"
+          },
+          "id": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Id",
+            "examples": [
+              0,
+              1,
+              2
+            ]
+          },
+          "current_reading": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SensorReading"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit",
+            "default": "l/min"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "Flowmeter",
+        "description": "Model for a flowmeter sensor."
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -431,7 +622,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -441,8 +632,8 @@
           },
           "position": {
             "type": "integer",
-            "maximum": 100,
-            "minimum": 0,
+            "maximum": 100.0,
+            "minimum": 0.0,
             "title": "Position"
           }
         },
@@ -462,7 +653,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -483,6 +674,38 @@
         "title": "Pump",
         "description": "Model representing a pump actuator."
       },
+      "SensorEnum": {
+        "type": "string",
+        "enum": [
+          "flowmeter"
+        ],
+        "const": "flowmeter",
+        "title": "SensorEnum",
+        "description": "Enumeration for different types of sensors."
+      },
+      "SensorReading": {
+        "properties": {
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "timestamp_ns": {
+            "type": "integer",
+            "title": "Timestamp Ns",
+            "description": "Timestamp of the reading in nanoseconds since Epoch",
+            "examples": [
+              1730906908814683100
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "timestamp_ns"
+        ],
+        "title": "SensorReading",
+        "description": "Base model for a sensor reading."
+      },
       "SolenoidValve": {
         "properties": {
           "type": {
@@ -491,7 +714,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
