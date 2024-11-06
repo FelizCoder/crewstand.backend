@@ -18,7 +18,7 @@ pump_service = PumpService()
 
 
 @router.get("/", tags=["Actuators"])
-def get_all() -> List[Union[SolenoidValve, ProportionalValve, Pump]]:
+def get_all_actuators() -> List[Union[SolenoidValve, ProportionalValve, Pump]]:
     """
     Retrieve a list of all actuators, including solenoid valves, proportional valves, and pumps.
 
