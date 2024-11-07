@@ -60,7 +60,7 @@ def create_sensor_router(service: SensorService):
         """
         return service.get_by_id(sensor_id)
 
-    @r.post("/{sensor_id}/readings", response_model=service.item_type)
+    @r.post("/{sensor_id}/reading", response_model=service.item_type)
     def post_reading(
         sensor_id: Annotated[int, Path(..., ge=0, lt=service.sensor.count)],
         reading: SensorReading,
