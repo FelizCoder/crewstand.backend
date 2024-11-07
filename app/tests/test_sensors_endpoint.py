@@ -66,7 +66,7 @@ def test_flowmeter_post_reading(client, mocker):
     )
 
     response = client.post(
-        f"/flowmeters/{sensor_id}/readings", data=new_reading.model_dump_json()
+        f"/flowmeters/{sensor_id}/reading", data=new_reading.model_dump_json()
     )
     assert response.status_code == 200
     actual = Flowmeter(**response.json())
@@ -82,7 +82,7 @@ def test_flowmeter_post_reading_request_invalid(client):
 
     for reading in invalid_readings:
         with pytest.raises(RequestValidationError) as exc_info:
-            _ = client.post(f"/flowmeters/{sensor_id}/readings", data=reading)
+            _ = client.post(f"/flowmeters/{sensor_id}/reading", data=reading)
         assert (
             exc_info.type == RequestValidationError
         )  # Unprocessable Entity (validation error)

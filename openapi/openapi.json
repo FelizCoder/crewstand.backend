@@ -477,14 +477,14 @@
         }
       }
     },
-    "/v1/sensors/flowmeters/{sensor_id}/readings": {
+    "/v1/sensors/flowmeters/{sensor_id}/reading": {
       "post": {
         "tags": [
           "Flowmeters"
         ],
         "summary": "Post Reading",
         "description": "Post a new reading for a specific sensor.\n\nArgs:\n    sensor_id (int): The ID of the sensor.\n    reading (SensorReading): The new reading to update.\n\nReturns:\n    service.item_type: The updated sensor object.",
-        "operationId": "post_reading_v1_sensors_flowmeters__sensor_id__readings_post",
+        "operationId": "post_reading_v1_sensors_flowmeters__sensor_id__reading_post",
         "parameters": [
           {
             "name": "sensor_id",
