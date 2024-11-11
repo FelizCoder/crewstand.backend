@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "swn crew backend",
-    "version": "0.6.0"
+    "version": "0.7.0"
   },
   "paths": {
     "/v1/actuators/": {
@@ -570,7 +570,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": 0.0,
+            "minimum": 0,
             "title": "Id",
             "examples": [
               0,
@@ -622,7 +622,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1.0,
+            "minimum": -1,
             "title": "Id",
             "examples": [
               0,
@@ -632,8 +632,8 @@
           },
           "position": {
             "type": "integer",
-            "maximum": 100.0,
-            "minimum": 0.0,
+            "maximum": 100,
+            "minimum": 0,
             "title": "Position"
           }
         },
@@ -653,7 +653,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1.0,
+            "minimum": -1,
             "title": "Id",
             "examples": [
               0,
@@ -714,7 +714,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1.0,
+            "minimum": -1,
             "title": "Id",
             "examples": [
               0,

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.6.0...v0.7.0) (2024-11-11)
+
+
+### Features
+
+* **sensors:** add sensor endpoints and update OpenAPI documentation ([d90b2d7](https://github.com/FelizCoder/crewstand.backend/commit/d90b2d73a52760f91cab78c414cc1944fe1d408c)), closes [#43](https://github.com/FelizCoder/crewstand.backend/issues/43)
+
 ## [0.6.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.5.1...v0.6.0) (2024-10-31)
 
 
