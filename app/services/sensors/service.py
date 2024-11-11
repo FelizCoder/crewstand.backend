@@ -1,13 +1,10 @@
-# app/services/sensors/service.py
 from typing import Generic, List, TypeVar
-from fastapi import HTTPException
 
 from app.models.sensors import (
     Sensor,
     SensorReading,
     SensorRepository,
 )
-from app.models.errors import ValidationError
 
 T = TypeVar("T", bound=Sensor)
 
