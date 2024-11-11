@@ -412,7 +412,7 @@
           "Flowmeters"
         ],
         "summary": "Get All",
-        "description": "Retrieve all sensors of a specific type.\n\nReturns:\n    List[service.item_type]: A list of sensors of the specified type.",
+        "description": "Retrieve all sensors of a specific type.\n\nReturns:\n    List[self.service.item_type]: A list of sensors of the specified type.",
         "operationId": "get_all_v1_sensors_flowmeters__get",
         "responses": {
           "200": {
@@ -438,7 +438,7 @@
           "Flowmeters"
         ],
         "summary": "Get By Id",
-        "description": "Retrieve a specific sensor by its ID.\n\nArgs:\n    sensor_id (int): The ID of the sensor to retrieve.\n\nReturns:\n    service.item_type: The sensor object with the specified ID.",
+        "description": "Retrieve a specific sensor by its ID.\n\nArgs:\n    sensor_id (int): The ID of the sensor to retrieve.\n\nReturns:\n    self.service.item_type: The sensor object with the specified ID.",
         "operationId": "get_by_id_v1_sensors_flowmeters__sensor_id__get",
         "parameters": [
           {
@@ -483,7 +483,7 @@
           "Flowmeters"
         ],
         "summary": "Post Reading",
-        "description": "Post a new reading for a specific sensor.\n\nArgs:\n    sensor_id (int): The ID of the sensor.\n    reading (SensorReading): The new reading to update.\n\nReturns:\n    service.item_type: The updated sensor object.",
+        "description": "Post a new reading for a specific sensor.\n\nArgs:\n    sensor_id (int): The ID of the sensor.\n    reading (SensorReading): The new reading to update.\n\nReturns:\n    self.service.item_type: The updated sensor object.",
         "operationId": "post_reading_v1_sensors_flowmeters__sensor_id__reading_post",
         "parameters": [
           {
@@ -570,7 +570,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": 0,
+            "minimum": 0.0,
             "title": "Id",
             "examples": [
               0,
@@ -622,7 +622,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -632,8 +632,8 @@
           },
           "position": {
             "type": "integer",
-            "maximum": 100,
-            "minimum": 0,
+            "maximum": 100.0,
+            "minimum": 0.0,
             "title": "Position"
           }
         },
@@ -653,7 +653,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -714,7 +714,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
