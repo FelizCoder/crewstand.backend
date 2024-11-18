@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.7.0...v0.8.0) (2024-11-18)
+
+
+### Features
+
+* add websocket broadcast functionality on post reading ([65dd526](https://github.com/FelizCoder/crewstand.backend/commit/65dd5260718fe6f2f1ecd6df5e362230ab5df16c)), closes [#47](https://github.com/FelizCoder/crewstand.backend/issues/47)
+
 ## [0.7.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.6.0...v0.7.0) (2024-11-11)
 
 
