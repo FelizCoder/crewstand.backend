@@ -5,7 +5,7 @@ This module contains the FastAPI application for the swncrew backend.
 from pathlib import Path
 import json
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.openapi.docs import get_swagger_ui_html
 from .api.v1.router import v1_router
@@ -40,7 +40,7 @@ async def root():
     Returns:
         dict: A dictionary containing a single key-value pair with the message.
     """
-    return {"message": "Hello World. This is the swncrew backend"}
+    return RedirectResponse(url="/docs")
 
 
 @app.get("/favicon.ico", include_in_schema=False)
