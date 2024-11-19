@@ -16,7 +16,7 @@ def setup_test_client():
 def test_read_main(client):
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Hello World. This is the swncrew backend"}
+    assert response.url == "http://testserver/docs"
 
 
 def test_swagger_ui_html(client):
