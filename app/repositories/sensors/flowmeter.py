@@ -31,10 +31,10 @@ class FlowmeterSensor(SensorRepository):
     """
 
     def __init__(self):
-        self.count = 1
         self.item_type = Flowmeter
 
         self.flowmeters = [Flowmeter(id=0)]
+        self.count = len(self.flowmeters)
 
     def get_all(self) -> List[Flowmeter]:
         flowmeters = self.flowmeters
