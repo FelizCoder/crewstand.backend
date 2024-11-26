@@ -133,6 +133,8 @@ class ProportionalActuator(ActuatorRepository):
         self.position_command.phys = actuator.position
         logger.debug(f"Proportional {actuator.id} set to {actuator.position}")
 
+        return actuator
+
     def _on_position_received(self, msg: PdoMap):
         new_position = msg["POS_Display.POS_Display"].phys
         self.position = new_position
