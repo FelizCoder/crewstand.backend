@@ -122,11 +122,11 @@ class ProportionalActuator(ActuatorRepository):
     def get_all(self) -> List[ProportionalValve]:
         return [self.get_by_id()]
 
-    def get_by_id(self, actuator_id: int = 1) -> ProportionalValve:
+    def get_by_id(self, actuator_id: int = 0) -> ProportionalValve:
         rounded_position = round(self.position)
         clipped_position = max(0, min(100, rounded_position))
 
-        return ProportionalValve(id=1, position=clipped_position)
+        return ProportionalValve(id=actuator_id, position=clipped_position)
 
     def set_state(self, actuator: ProportionalValve):
         # Assuming you set command using TPDO and RPDO data
