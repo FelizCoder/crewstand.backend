@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.9.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.8.0...v0.9.0) (2024-11-26)
+
+
+### Features
+
+* redirect root to `/docs` ([9926e03](https://github.com/FelizCoder/crewstand.backend/commit/9926e038cb8ec0fac2903782498376d0e2abbaa4))
+
+
+### Bug Fixes
+
+* **proportional can:** ensure correct range and integer position ([3d8b87d](https://github.com/FelizCoder/crewstand.backend/commit/3d8b87dc75afb363e79bb4b6eda3c23058fb7211))
+
 ## [0.8.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.7.0...v0.8.0) (2024-11-18)
 
 
