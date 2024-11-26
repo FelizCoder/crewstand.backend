@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.1](https://github.com/FelizCoder/crewstand.backend/compare/v0.9.0...v0.9.1) (2024-11-26)
+
+
+### Bug Fixes
+
+* **ProportionalCAN:** add `set_state` return value ([b43c14b](https://github.com/FelizCoder/crewstand.backend/commit/b43c14b160df5cf676b54487c2a50c1eb4e3c681))
+* **ProportionalCAN:** change default in `get_by_id` ([87a4071](https://github.com/FelizCoder/crewstand.backend/commit/87a407148a6e2abd5ec1fb5e0612c378e76c4cbb))
+
 ## [0.9.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.8.0...v0.9.0) (2024-11-26)
 
 
