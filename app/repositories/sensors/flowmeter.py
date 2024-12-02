@@ -1,6 +1,7 @@
 from typing import List
 from app.models.sensors import Flowmeter, SensorReading, SensorRepository
 from app.utils.logger import logger
+from app.utils.config import settings
 
 
 class FlowmeterSensor(SensorRepository):
@@ -33,7 +34,7 @@ class FlowmeterSensor(SensorRepository):
     def __init__(self):
         self.item_type = Flowmeter
 
-        self.flowmeters = [Flowmeter(id=0)]
+        self.flowmeters = [Flowmeter(id=i) for i in range(settings.FLOWMETER_COUNT)]
         self.count = len(self.flowmeters)
 
     def get_all(self) -> List[Flowmeter]:

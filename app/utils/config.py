@@ -16,6 +16,7 @@ class Config(BaseSettings):
 
     DEBUG_LEVEL: str = "INFO"
     DEVICE: Union[Device, None] = None
+    FLOWMETER_COUNT: int = 1
     GPIO_MODE: str = ""
     GPIOZERO_PIN_FACTORY: Union[str, None] = None
     PROJECT_NAME: str = "swncrew backend"

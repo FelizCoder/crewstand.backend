@@ -24,6 +24,7 @@ The [`config.py`](app\utils\config.py) file in the project allows for several co
 | Configuration Variable | Description | Default | Example | Required |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | --------------- | -------- |
 | DEBUG_LEVEL | The level of debugging information to log. | INFO | DEBUG | No |
+| FLOWMETER_COUNT | The number of flowmeters connected to the system. | 1  | 2 |
 | GPIO_MODE | Specifies the mode of GPIO usage. | None | mock | No |
 | GPIOZERO_PIN_FACTORY | Determines the pin factory to use when interacting with GPIO pins. This setting affects how the GPIOZero library operates. For more information, refer to the [official GPIOZero documentation](https://gpiozero.readthedocs.io/en/latest/api_pins.html#changing-the-pin-factory). Although not used in the project, this variable's value is read by the Config to display it for debugging purposes. | None | mock | No |
 | PROJECT_NAME | The name of the project. | swncrew backend | swncrew backend | No |
