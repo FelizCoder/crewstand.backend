@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.9.1...v0.10.0) (2024-12-02)
+
+
+### Features
+
+* add support for multiple flowmeters ([6178afe](https://github.com/FelizCoder/crewstand.backend/commit/6178afedaf54f29070ac5a0a93522109117110e0)), closes [#55](https://github.com/FelizCoder/crewstand.backend/issues/55)
+
 ## [0.9.1](https://github.com/FelizCoder/crewstand.backend/compare/v0.9.0...v0.9.1) (2024-11-26)
 
 
