@@ -87,7 +87,7 @@ class SensorRouter(APIRouter):
             Returns:
                 self.service.item_type: The updated sensor object.
             """
-            return self.service.post_reading(sensor_id, reading)
+            return await self.service.post_reading(sensor_id, reading)
 
         @self.websocket("/ws/{sensor_id}")
         async def websocket_endpoint(
