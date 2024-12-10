@@ -13,79 +13,56 @@ from app.utils.logger import logger
 
 
 class WebSocketManager:
-    """
-    Manager for handling WebSocket connections and broadcasting messages.
-
-    This class allows for managing multiple WebSocket connections, including
-    connecting, disconnecting, and broadcasting messages to all active connections.
-
-    Attributes
-    ----------
-    active_connections : list of WebSocket
-        A list storing the active WebSocket connections.
-
-    Methods
-    -------
-    connect(websocket)
-        Accepts a WebSocket connection and adds it to the active connections.
-    disconnect(websocket)
-        Removes a WebSocket connection from the active connections.
-    broadcast(message)
-        Sends a text message to all active WebSocket connections.
-    """
-
-    def __init__(self):
+    def __init__(self, count: int = 1):
         """
         Initializes a new instance of WebSocketManager.
 
-        This sets up an empty list of active WebSocket connections.
+        Args:
+            count (int, optional): The number of WebSocket managers to initialize. Defaults to 1.
         """
-        self.active_connections: List[WebSocket] = []
+        self.active_connections: List[List[WebSocket]] = [[] for _ in range(count)]
 
-    async def connect(self, websocket: WebSocket):
+    # ... (existing methods remain the same, with adjustments to handle the list of lists)
+
+    async def connect(self, index: int, websocket: WebSocket):
         """
         Accepts a WebSocket connection and adds it to the active connections.
 
         Parameters
         ----------
+        index : int
+            The index of the WebSocket manager.
         websocket : WebSocket
             The WebSocket connection to accept and manage.
         """
         await websocket.accept()
-        self.active_connections.append(websocket)
-        logger.debug(f"WebSocket connection accepted: {websocket}")
+        self.active_connections[index].append(websocket)
+        logger.debug(f"WebSocket connection accepted: {websocket.client}")
 
-    def disconnect(self, websocket: WebSocket):
+    def disconnect(self, index: int, websocket: WebSocket):
         """
         Removes a WebSocket connection from the active connections.
 
         Parameters
         ----------
+        index : int
+            The index of the WebSocket manager.
         websocket : WebSocket
             The WebSocket connection to be removed.
         """
-        self.active_connections.remove(websocket)
-        logger.debug(f"WebSocket connection removed: {websocket}")
+        self.active_connections[index].remove(websocket)
+        logger.debug(f"WebSocket connection removed: {websocket.client}")
 
-    async def send_personal_message(self, message: str, websocket: WebSocket):
-        """
-        Send a personal message to a specific WebSocket connection.
-
-        Args:
-            message (str): The message to be sent to the WebSocket connection.
-            websocket (WebSocket): The WebSocket connection to send the message to.
-        """
-        await websocket.send_text(message)
-
-    async def broadcast(self, message: str):
+    async def broadcast(self, index: int, message: str):
         """
         Sends a text message to all active WebSocket connections.
 
         Parameters
         ----------
+        index : int
+            The index of the WebSocket manager.
         message : str
             The message to be broadcasted to all active connections.
         """
-        logger.debug(f"Broadcasting message: {message}")
-        for connection in self.active_connections:
+        for connection in self.active_connections[index]:
             await connection.send_text(message)
