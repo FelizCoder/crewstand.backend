@@ -3,6 +3,7 @@ from typing import Generic, List, TypeVar
 from fastapi import WebSocket
 from app.models.sensors import Sensor, SensorReading, SensorRepository
 from app.utils.websocket_manager import WebSocketManager
+from app.utils.influx_client import influx_connector
 
 T = TypeVar("T", bound=Sensor)
 
@@ -23,6 +24,7 @@ class SensorService(Generic[T]):
         self.sensor = sensor
         self.item_type = item_type
         self.websocket_managers = [WebSocketManager() for _ in range(self.sensor.count)]
+        self.influx = influx_connector
 
     def get_all(self) -> List[T]:
         """
@@ -56,8 +58,10 @@ class SensorService(Generic[T]):
         Returns:
             T: The updated sensor.
         """
+        sensor = self.sensor.post_reading(sensor_id, reading)
+        self.influx.write_sensor(sensor)
         self.broadcast_reading(sensor_id, reading)
-        return self.sensor.post_reading(sensor_id, reading)
+        return sensor
 
     async def connect_websocket(self, sensor_id: int, websocket: WebSocket):
         """
