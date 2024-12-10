@@ -1,5 +1,6 @@
 from typing import Literal, Union
 from gpiozero import Device
+from pydantic import HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from app.utils.logger import logger
@@ -18,6 +19,10 @@ class Config(BaseSettings):
     DEVICE: Union[Device, None] = None
     FLOWMETER_COUNT: int = 1
     GPIO_MODE: str = ""
+    INFLUXDB_BUCKET: str
+    INFLUXDB_ORG: str
+    INFLUXDB_TOKEN: str
+    INFLUXDB_URL: HttpUrl
     GPIOZERO_PIN_FACTORY: Union[str, None] = None
     PROJECT_NAME: str = "swncrew backend"
     PROPORTIONAL_CAN_INTERFACE: str = "can0"
