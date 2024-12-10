@@ -101,18 +101,11 @@ def test_websocket_initial_reading(client, mocker):
         assert data == expected.model_dump_json()
 
 
-def test_broadcast_on_post_reading_multiple_clients(client, mocker):
+def test_broadcast_on_post_reading_multiple_clients(client):
     sensor_id = 0
     first_reading = SensorReading(value=42.0, timestamp_ns=1730906908814683100)
     second_reading = SensorReading(value=43.0, timestamp_ns=1730906908814683101)
     expected = Flowmeter(id=sensor_id, current_reading=first_reading)
-
-    def patch_reading_side_effect(sensor_id, reading: SensorReading):
-        return Flowmeter(id=sensor_id, current_reading=reading)
-
-    mocker.patch.object(
-        FlowmeterService, "post_reading", side_effect=patch_reading_side_effect
-    )
 
     with ExitStack() as stack:
         websockets = [
