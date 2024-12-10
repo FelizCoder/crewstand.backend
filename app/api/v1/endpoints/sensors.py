@@ -4,7 +4,6 @@ from fastapi import APIRouter, Path, WebSocket, WebSocketDisconnect
 from app.models.sensors import Flowmeter, SensorReading
 from app.services.sensors.service import SensorService
 from app.services.sensors.flowmeter import FlowmeterService
-from app.utils.websocket_manager import WebSocketManager
 
 router = APIRouter()
 
@@ -41,9 +40,6 @@ class SensorRouter(APIRouter):
         """
         super().__init__(**kwargs)
         self.service = service
-        self.websocket_managers = [
-            WebSocketManager() for _ in range(self.service.sensor.count)
-        ]
         self._setup_routes()
 
     def _setup_routes(self):
@@ -91,9 +87,6 @@ class SensorRouter(APIRouter):
             Returns:
                 self.service.item_type: The updated sensor object.
             """
-            await self.websocket_managers[sensor_id].broadcast(
-                reading.model_dump_json()
-            )
             return self.service.post_reading(sensor_id, reading)
 
         @self.websocket("/ws/{sensor_id}")
@@ -101,24 +94,14 @@ class SensorRouter(APIRouter):
             websocket: WebSocket,
             sensor_id: Annotated[int, Path(..., ge=0, lt=self.service.sensor.count)],
         ):
-            await self.websocket_managers[sensor_id].connect(websocket)
-            # Retrieve the current reading for the specified sensor
-            current_reading: SensorReading = self.service.get_by_id(
-                sensor_id
-            ).current_reading
-            # Send the current reading to the connected websocket client
-            if current_reading:
-                await self.websocket_managers[sensor_id].send_personal_message(
-                    current_reading.model_dump_json(),
-                    websocket,
-                )
+            await self.service.connect_websocket(sensor_id, websocket)
             try:
                 # Stay connected to the websocket
                 while True:
                     await websocket.receive_text()
             except WebSocketDisconnect:
                 # Handle the websocket disconnection
-                self.websocket_managers[sensor_id].disconnect(websocket)
+                self.service.disconnect_websocket(sensor_id, websocket)
 
 
 # Import routers using the create_sensor_router function
