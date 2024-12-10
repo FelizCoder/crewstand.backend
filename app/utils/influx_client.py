@@ -10,7 +10,7 @@ from app.utils.config import settings
 class InfluxConnector:
     def __init__(
         self,
-        url=settings.INFLUXDB_URL,
+        url=settings.INFLUXDB_URL.unicode_string(),
         token=settings.INFLUXDB_TOKEN,
         org=settings.INFLUXDB_ORG,
         bucket=settings.INFLUXDB_BUCKET,
