@@ -28,7 +28,7 @@ class InfluxConnector:
 
     def write_sensor(self, sensor: Sensor):
         point = (
-            Point(sensor.type)
+            Point(sensor.type.value)
             .field(field=sensor.id, value=sensor.current_reading.value)
             .time(
                 time=sensor.current_reading.timestamp_ns,
@@ -40,7 +40,7 @@ class InfluxConnector:
 
     def write_actuator(self, actuator: Actuator, state):
         point = (
-            Point(actuator.type)
+            Point(actuator.type.value)
             .field(field=actuator.id, value=state)
             .time(time=time.time_ns(), write_precision=WritePrecision.NS)
         )
