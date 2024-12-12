@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.11.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.10.0...v0.11.0) (2024-12-12)
+
+
+### Features
+
+* **influxdb:** add InfluxDB configuration and client ([8d0ca0f](https://github.com/FelizCoder/crewstand.backend/commit/8d0ca0f5f766e22218f43aa9ecf0c59bb20638dc)), closes [#56](https://github.com/FelizCoder/crewstand.backend/issues/56)
+* **sensors:** integrate InfluxDB logging ([d1fd1ed](https://github.com/FelizCoder/crewstand.backend/commit/d1fd1ed917c5881e6c7ff665755cbf159ed1a607)), closes [#56](https://github.com/FelizCoder/crewstand.backend/issues/56)
+
 ## [0.10.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.9.1...v0.10.0) (2024-12-02)
 
 
