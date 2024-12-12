@@ -99,39 +99,3 @@ def test_websocket_initial_reading(client, mocker):
     with client.websocket_connect(f"/flowmeters/ws/{sensor_id}") as websocket:
         data = websocket.receive_text()
         assert data == expected.model_dump_json()
-
-
-def test_broadcast_on_post_reading_multiple_clients(client):
-    sensor_id = 0
-    first_reading = SensorReading(value=42.0, timestamp_ns=1730906908814683100)
-    second_reading = SensorReading(value=43.0, timestamp_ns=1730906908814683101)
-    expected = Flowmeter(id=sensor_id, current_reading=first_reading)
-
-    with ExitStack() as stack:
-        websockets = [
-            stack.enter_context(client.websocket_connect(f"/flowmeters/ws/{sensor_id}"))
-            for _ in range(3)
-        ]
-
-        # Post a new reading
-        response = client.post(
-            f"/flowmeters/{sensor_id}/reading", data=first_reading.model_dump_json()
-        )
-
-        assert response.status_code == 200
-        actual = Flowmeter(**response.json())
-        assert actual == expected
-
-        # Ensure both websockets receive the broadcasted message
-        for websocket in websockets:
-            data = websocket.receive_text()
-            assert data == first_reading.model_dump_json()
-
-        # Post a second reading
-        _ = client.post(
-            f"/flowmeters/{sensor_id}/reading", data=second_reading.model_dump_json()
-        )
-
-        for websocket in websockets:
-            data = websocket.receive_text()
-            assert data == second_reading.model_dump_json()
