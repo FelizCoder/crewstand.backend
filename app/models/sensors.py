@@ -1,4 +1,4 @@
-from typing import Generic, List, TypeVar, Union
+from typing import Generic, List, Literal, TypeVar, Union
 from enum import Enum
 from pydantic import BaseModel, Field
 
@@ -32,7 +32,7 @@ class Sensor(BaseModel):
 class Flowmeter(Sensor):
     """Model for a flowmeter sensor."""
 
-    type: SensorEnum = SensorEnum.FLOWMETER
+    type: Literal[SensorEnum.FLOWMETER] = SensorEnum.FLOWMETER
     unit: str = "l/min"
 
 

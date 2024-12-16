@@ -15,7 +15,7 @@ class SolenoidActuator(ActuatorRepository):
     def get_all(self) -> List[SolenoidValve]:
         values: List[bool] = self.solenoids.value
         solenoid_valves: List[SolenoidValve] = [
-            SolenoidValve(id=i, open=val) for i, val in enumerate(values)
+            SolenoidValve(id=i, state=val) for i, val in enumerate(values)
         ]
         logger.debug(f"Solenoid valves: {solenoid_valves}")
 
@@ -23,12 +23,12 @@ class SolenoidActuator(ActuatorRepository):
 
     def get_by_id(self, id: int) -> SolenoidValve:
         state: bool = self.solenoids[id].value
-        solenoid_valve: SolenoidValve = SolenoidValve(id=id, open=state)
+        solenoid_valve: SolenoidValve = SolenoidValve(id=id, state=state)
 
         return solenoid_valve
 
     def set_state(self, request: SolenoidValve):
-        request_state: bool = request.open
+        request_state: bool = request.state
 
         if request.id == -1:
             # Set state for all solenoids
@@ -37,4 +37,4 @@ class SolenoidActuator(ActuatorRepository):
             self.solenoids[request.id].value = request_state
 
         logger.debug(f"Solenoid {request.id} set to {request_state}")
-        return SolenoidValve(id=request.id, open=self.solenoids.value[request.id])
+        return SolenoidValve(id=request.id, state=self.solenoids.value[request.id])

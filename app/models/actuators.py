@@ -1,4 +1,4 @@
-from typing import Generic, List, TypeVar
+from typing import Generic, List, Literal, TypeVar
 from enum import Enum
 from pydantic import BaseModel, Field
 
@@ -21,22 +21,22 @@ class Actuator(BaseModel):
 class SolenoidValve(Actuator):
     """Model representing a solenoid valve actuator."""
 
-    type: ActuatorEnum = ActuatorEnum.SOLENOID
-    open: bool
+    type: Literal[ActuatorEnum.SOLENOID] = ActuatorEnum.SOLENOID
+    state: bool
 
 
 class ProportionalValve(Actuator):
     """Model representing a proportional valve actuator."""
 
-    type: ActuatorEnum = ActuatorEnum.PROPORTIONAL
-    position: int = Field(..., ge=0, le=100)
+    type: Literal[ActuatorEnum.PROPORTIONAL] = ActuatorEnum.PROPORTIONAL
+    state: float = Field(..., ge=0, le=100)
 
 
 class Pump(Actuator):
     """Model representing a pump actuator."""
 
-    type: ActuatorEnum = ActuatorEnum.PUMP
-    running: bool
+    type: Literal[ActuatorEnum.PUMP] = ActuatorEnum.PUMP
+    state: bool
 
 
 T = TypeVar("T", bound=Actuator)

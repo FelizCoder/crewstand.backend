@@ -17,9 +17,9 @@ def setup_test_client():
 
 
 def test_get_all_actuators(client, mocker):
-    expected_solenoid = [SolenoidValve(id=1, open=False)]
-    expected_proportional = [ProportionalValve(id=2, position=42)]
-    expected_pump = [Pump(id=3, running=True)]
+    expected_solenoid = [SolenoidValve(id=1, state=False)]
+    expected_proportional = [ProportionalValve(id=2, state=42)]
+    expected_pump = [Pump(id=3, state=True)]
 
     mocker.patch.object(SolenoidService, "get_all", return_value=expected_solenoid)
     mocker.patch.object(
@@ -38,7 +38,7 @@ def test_get_all_actuators(client, mocker):
 
 
 def test_solenoid_get_all(client, mocker):
-    expected = [SolenoidValve(id=1, open=True), SolenoidValve(id=2, open=False)]
+    expected = [SolenoidValve(id=1, state=True), SolenoidValve(id=2, state=False)]
     mocker.patch.object(
         SolenoidService,
         "get_all",
@@ -54,7 +54,7 @@ def test_solenoid_get_all(client, mocker):
 
 
 def test_solenoid_get_by_id(client, mocker):
-    expected = SolenoidValve(id=1, open=True)
+    expected = SolenoidValve(id=1, state=True)
     mocker.patch.object(
         SolenoidService,
         "get_by_id",
@@ -80,13 +80,13 @@ def test_solenoid_set(client, mocker):
     )
 
     # Test setting state to False
-    expected = SolenoidValve(id=42, open=False)
+    expected = SolenoidValve(id=42, state=False)
     response = client.post("/solenoid/set", data=expected.model_dump_json())
     assert response.status_code == 200
     actual = SolenoidValve(**response.json())
     assert actual == expected
     # Test setting state to True
-    expected = SolenoidValve(id=24, open=True)
+    expected = SolenoidValve(id=24, state=True)
     response = client.post("/solenoid/set", data=expected.model_dump_json())
     assert response.status_code == 200
     actual = SolenoidValve(**response.json())
@@ -94,7 +94,7 @@ def test_solenoid_set(client, mocker):
 
 
 def test_solenoid_set_request_invalid(client):
-    requests = [Pump(id=1, running=True), ProportionalValve(id=1, position=42)]
+    requests = [Pump(id=1, state=True), ProportionalValve(id=1, state=42)]
 
     for request in requests:
         with pytest.raises(RequestValidationError) as exc_info:
@@ -104,8 +104,8 @@ def test_solenoid_set_request_invalid(client):
 
 def test_proportional_get_all(client, mocker):
     expected = [
-        ProportionalValve(id=1, position=42),
-        ProportionalValve(id=2, position=24),
+        ProportionalValve(id=1, state=42),
+        ProportionalValve(id=2, state=24),
     ]
 
     mocker.patch.object(
@@ -123,7 +123,7 @@ def test_proportional_get_all(client, mocker):
 
 
 def test_proportional_get_by_id(client, mocker):
-    expected = ProportionalValve(id=1, position=42)
+    expected = ProportionalValve(id=1, state=42)
     mocker.patch.object(
         ProportionalService,
         "get_by_id",
@@ -149,14 +149,14 @@ def test_proportional_set(client, mocker):
     )
 
     # Test setting position to 42
-    expected = ProportionalValve(id=1, position=42)
+    expected = ProportionalValve(id=1, state=42)
     response = client.post("/proportional/set", data=expected.model_dump_json())
     assert response.status_code == 200
     actual = ProportionalValve(**response.json())
     assert actual == expected
 
     # Test setting position to 24
-    expected = ProportionalValve(id=2, position=24)
+    expected = ProportionalValve(id=2, state=24)
     response = client.post("/proportional/set", data=expected.model_dump_json())
     assert response.status_code == 200
     actual = ProportionalValve(**response.json())
@@ -165,8 +165,8 @@ def test_proportional_set(client, mocker):
 
 def test_proportional_set_request_invalid(client):
     requests = [
-        Pump(id=1, running=True),  # invalid request for ProportionalValve endpoint
-        SolenoidValve(id=3, open=False),
+        Pump(id=1, state=True),  # invalid request for ProportionalValve endpoint
+        SolenoidValve(id=3, state=False),
     ]
 
     for request in requests:
@@ -177,8 +177,8 @@ def test_proportional_set_request_invalid(client):
 
 def test_pump_get_all(client, mocker):
     expected = [
-        Pump(id=1, running=True),
-        Pump(id=2, running=False),
+        Pump(id=1, state=True),
+        Pump(id=2, state=False),
     ]
 
     mocker.patch.object(
@@ -206,13 +206,13 @@ def test_pump_set(client, mocker):
     )
 
     # Test setting state to True
-    expected = Pump(id=1, running=True)
+    expected = Pump(id=1, state=True)
     response = client.post("/pump/set", data=expected.model_dump_json())
     assert response.status_code == 200
     actual = Pump(**response.json())
     assert actual == expected
     # Test setting state to False
-    expected = Pump(id=2, running=False)
+    expected = Pump(id=2, state=False)
     response = client.post("/pump/set", data=expected.model_dump_json())
     assert response.status_code == 200
     actual = Pump(**response.json())
@@ -220,7 +220,7 @@ def test_pump_set(client, mocker):
 
 
 def test_pump_get_by_id(client, mocker):
-    expected = Pump(id=1, running=True)
+    expected = Pump(id=1, state=True)
 
     mocker.patch.object(
         PumpService,
@@ -236,8 +236,8 @@ def test_pump_get_by_id(client, mocker):
 
 def test_pump_set_request_invalid(client):
     requests = [
-        ProportionalValve(id=1, position=42),  # invalid request for Pump endpoint
-        SolenoidValve(id=2, open=True),
+        ProportionalValve(id=1, state=42),  # invalid request for Pump endpoint
+        SolenoidValve(id=2, state=True),
     ]
 
     for request in requests:
