@@ -21,7 +21,7 @@ class ProportionalActuator(ActuatorRepository):
     def get_all(self) -> List[ProportionalValve]:
         values: List[float] = self.proportionals.value
         proportional_valves: List[ProportionalValve] = [
-            ProportionalValve(id=i, position=round(val * self.factor))
+            ProportionalValve(id=i, state=round(val * self.factor))
             for i, val in enumerate(values)
         ]
         logger.debug("Proportional valves: %s", proportional_valves)
@@ -30,13 +30,13 @@ class ProportionalActuator(ActuatorRepository):
     def get_by_id(self, actuator_id: int) -> ProportionalValve:
         state: int = round(self.proportionals[actuator_id].value * self.factor)
         proportional_valve: ProportionalValve = ProportionalValve(
-            id=actuator_id, position=state
+            id=actuator_id, state=state
         )
 
         return proportional_valve
 
     def set_state(self, actuator: ProportionalValve):
-        request_state: float = float(actuator.position) / self.factor
+        request_state: float = float(actuator.state) / self.factor
 
         if actuator.id == -1:
             # Set state for all proportionals
@@ -46,4 +46,4 @@ class ProportionalActuator(ActuatorRepository):
 
         logger.debug("Proportional %s set to %s", actuator.id, request_state)
         new_state: int = round(self.proportionals[actuator.id].value * self.factor)
-        return ProportionalValve(id=actuator.id, position=new_state)
+        return ProportionalValve(id=actuator.id, state=new_state)

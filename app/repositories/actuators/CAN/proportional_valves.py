@@ -126,12 +126,12 @@ class ProportionalActuator(ActuatorRepository):
         rounded_position = round(self.position)
         clipped_position = max(0, min(100, rounded_position))
 
-        return ProportionalValve(id=actuator_id, position=clipped_position)
+        return ProportionalValve(id=actuator_id, state=clipped_position)
 
     def set_state(self, actuator: ProportionalValve):
         # Assuming you set command using TPDO and RPDO data
-        self.position_command.phys = actuator.position
-        logger.debug(f"Proportional {actuator.id} set to {actuator.position}")
+        self.position_command.phys = actuator.state
+        logger.debug(f"Proportional {actuator.id} set to {actuator.state}")
 
         return actuator
 

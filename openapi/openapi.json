@@ -552,25 +552,20 @@
   },
   "components": {
     "schemas": {
-      "ActuatorEnum": {
-        "type": "string",
-        "enum": [
-          "solenoid valve",
-          "proportional valve",
-          "pump"
-        ],
-        "title": "ActuatorEnum",
-        "description": "Enumeration for different types of actuators."
-      },
       "Flowmeter": {
         "properties": {
           "type": {
-            "$ref": "#/components/schemas/SensorEnum",
+            "type": "string",
+            "enum": [
+              "flowmeter"
+            ],
+            "const": "flowmeter",
+            "title": "Type",
             "default": "flowmeter"
           },
           "id": {
             "type": "integer",
-            "minimum": 0,
+            "minimum": 0.0,
             "title": "Id",
             "examples": [
               0,
@@ -617,12 +612,17 @@
       "ProportionalValve": {
         "properties": {
           "type": {
-            "$ref": "#/components/schemas/ActuatorEnum",
+            "type": "string",
+            "enum": [
+              "proportional valve"
+            ],
+            "const": "proportional valve",
+            "title": "Type",
             "default": "proportional valve"
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -630,17 +630,17 @@
               2
             ]
           },
-          "position": {
-            "type": "integer",
-            "maximum": 100,
-            "minimum": 0,
-            "title": "Position"
+          "state": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "State"
           }
         },
         "type": "object",
         "required": [
           "id",
-          "position"
+          "state"
         ],
         "title": "ProportionalValve",
         "description": "Model representing a proportional valve actuator."
@@ -648,12 +648,17 @@
       "Pump": {
         "properties": {
           "type": {
-            "$ref": "#/components/schemas/ActuatorEnum",
+            "type": "string",
+            "enum": [
+              "pump"
+            ],
+            "const": "pump",
+            "title": "Type",
             "default": "pump"
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -661,27 +666,18 @@
               2
             ]
           },
-          "running": {
+          "state": {
             "type": "boolean",
-            "title": "Running"
+            "title": "State"
           }
         },
         "type": "object",
         "required": [
           "id",
-          "running"
+          "state"
         ],
         "title": "Pump",
         "description": "Model representing a pump actuator."
-      },
-      "SensorEnum": {
-        "type": "string",
-        "enum": [
-          "flowmeter"
-        ],
-        "const": "flowmeter",
-        "title": "SensorEnum",
-        "description": "Enumeration for different types of sensors."
       },
       "SensorReading": {
         "properties": {
@@ -709,12 +705,17 @@
       "SolenoidValve": {
         "properties": {
           "type": {
-            "$ref": "#/components/schemas/ActuatorEnum",
+            "type": "string",
+            "enum": [
+              "solenoid valve"
+            ],
+            "const": "solenoid valve",
+            "title": "Type",
             "default": "solenoid valve"
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -722,15 +723,15 @@
               2
             ]
           },
-          "open": {
+          "state": {
             "type": "boolean",
-            "title": "Open"
+            "title": "State"
           }
         },
         "type": "object",
         "required": [
           "id",
-          "open"
+          "state"
         ],
         "title": "SolenoidValve",
         "description": "Model representing a solenoid valve actuator."

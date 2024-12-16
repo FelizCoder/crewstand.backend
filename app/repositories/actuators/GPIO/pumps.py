@@ -14,19 +14,19 @@ class PumpActuator(ActuatorRepository):
 
     def get_all(self) -> List[Pump]:
         values: List[bool] = self.pumps.value
-        pumps: List[Pump] = [Pump(id=i, running=val) for i, val in enumerate(values)]
+        pumps: List[Pump] = [Pump(id=i, state=val) for i, val in enumerate(values)]
         logger.debug(f"Pumps: {pumps}")
 
         return pumps
 
     def get_by_id(self, id: int) -> Pump:
         state: bool = self.pumps[id].value
-        solenoid_valve: Pump = Pump(id=id, running=state)
+        solenoid_valve: Pump = Pump(id=id, state=state)
 
         return solenoid_valve
 
     def set_state(self, request: Pump):
-        request_state: bool = request.running
+        request_state: bool = request.state
 
         if request.id == -1:
             # Set state for all solenoids
@@ -35,4 +35,4 @@ class PumpActuator(ActuatorRepository):
             self.pumps[request.id].value = request_state
 
         logger.debug(f"Pump {request.id} set to {request_state}")
-        return Pump(id=request.id, running=self.pumps.value[request.id])
+        return Pump(id=request.id, state=self.pumps.value[request.id])
