@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.11.0...v1.0.0) (2024-12-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* **models:** The following actuator-specific state attributes have been replaced:
+    - `SolenoidValve`: `open` -> `state` (bool)
+    - `Pump`: `running` -> `state` (bool)
+    - `ProportionalValve`: `position` -> `state` (float)
+
+### Code Refactoring
+
+* **models:** unify actuator state attributes into a single `state` field ([474a2d1](https://github.com/FelizCoder/crewstand.backend/commit/474a2d1a5e84717d122fbc733f96360591e27c19))
+
 ## [0.11.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.10.0...v0.11.0) (2024-12-12)
 
 
