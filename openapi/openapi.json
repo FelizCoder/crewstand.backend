@@ -565,7 +565,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": 0,
+            "minimum": 0.0,
             "title": "Id",
             "examples": [
               0,
@@ -622,7 +622,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -632,8 +632,8 @@
           },
           "state": {
             "type": "number",
-            "maximum": 100,
-            "minimum": 0,
+            "maximum": 100.0,
+            "minimum": 0.0,
             "title": "State"
           }
         },
@@ -658,7 +658,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -715,7 +715,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,

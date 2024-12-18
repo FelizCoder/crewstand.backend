@@ -16,6 +16,7 @@ class Actuator(BaseModel):
 
     type: ActuatorEnum
     id: int = Field(..., ge=-1, examples=[0, 1, 2])
+    state: bool | float
 
 
 class SolenoidValve(Actuator):
