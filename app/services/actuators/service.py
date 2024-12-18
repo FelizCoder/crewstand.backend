@@ -34,7 +34,7 @@ class ActuatorService(Generic[T]):
         self.influx = influx_connector
 
         # Send initial states to Database and Websockets
-        self._broadcast_all_actuators()
+        asyncio.run(self._broadcast_all_actuators())
 
     def get_all(self) -> List[T]:
         """
