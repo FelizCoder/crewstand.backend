@@ -2,7 +2,7 @@ import time
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-from app.models.actuators import Actuator
+from app.models.actuators import Actuator, ActuatorEnum
 from app.models.sensors import Sensor
 from app.utils.config import settings
 from app.utils.logger import logger
@@ -100,6 +100,7 @@ class InfluxConnector:
         point = (
             Point(sensor.type.value)
             .field(field=sensor.id, value=sensor.current_reading.value)
+            .tag(key="id", value=sensor.id)
             .time(
                 time=sensor.current_reading.timestamp_ns,
                 write_precision=WritePrecision.NS,
@@ -137,6 +138,23 @@ class InfluxConnector:
         point = (
             Point(actuator.type.value)
             .field(field=actuator.id, value=actuator.state)
+            .tag(key="id", value=actuator.id)
+            .tag(key="state", value="set")
+            .time(time=timestamp_ns, write_precision=WritePrecision.NS)
+        )
+        self._write(point)
+
+    def write_current_proportional_position(
+        self,
+        proportional_id: int,
+        current_position: float,
+        timestamp_ns: int = time.time_ns(),
+    ):
+        point = (
+            Point(ActuatorEnum.PROPORTIONAL.value)
+            .field(field=proportional_id, value=current_position)
+            .tag(key="id", value=proportional_id)
+            .tag(key="state", value="current")
             .time(time=timestamp_ns, write_precision=WritePrecision.NS)
         )
         self._write(point)
