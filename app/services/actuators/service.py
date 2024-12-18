@@ -177,6 +177,23 @@ class ActuatorService(Generic[T]):
         """
         self.websocket_manager.disconnect(actuator_id, websocket)
 
+    def disconnect(self) -> None:
+        """Disconnect from the service.
+
+        This method will terminate the connection to the service,
+        freeing up resources and resetting the object to a state as if
+        it had just been instantiated.
+
+        """
+
+    async def connect_current_position_websocket(self, websocket: WebSocket) -> None:
+        pass
+
+    async def disconnect_current_position_websocket(
+        self, ws_id: int, websocket: WebSocket
+    ) -> None:
+        pass
+
     async def _broadcast_all_actuators(self):
         """
         Broadcast the current state of all actuators to connected clients.

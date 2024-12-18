@@ -47,3 +47,6 @@ class ProportionalActuator(ActuatorRepository):
         logger.debug("Proportional %s set to %s", actuator.id, request_state)
         new_state: int = round(self.proportionals[actuator.id].value * self.factor)
         return ProportionalValve(id=actuator.id, state=new_state)
+
+    def disconnect(self):
+        pass
