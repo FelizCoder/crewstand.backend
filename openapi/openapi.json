@@ -635,6 +635,19 @@
             "maximum": 100.0,
             "minimum": 0.0,
             "title": "State"
+          },
+          "current_position": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Position"
           }
         },
         "type": "object",

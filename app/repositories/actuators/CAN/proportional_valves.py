@@ -1,13 +1,17 @@
 # pylint: disable=E1136
 
+import asyncio
 import os
 import canopen
 from canopen.pdo.base import PdoMap
 from typing import List
 
+from fastapi import WebSocket
+
 from app.models.actuators import ActuatorRepository, ProportionalValve
 from app.utils.logger import logger
 from app.utils.config import settings
+from app.utils.websocket_manager import WebSocketManager
 
 
 class ProportionalActuator(ActuatorRepository):
@@ -78,6 +82,8 @@ class ProportionalActuator(ActuatorRepository):
         self.count = 1  # Only the default setting for one Bürkert MotorValve 3280 is supported at the moment
         self.item_type = ProportionalValve
 
+        self.current_position_websocket = WebSocketManager(count=self.count)
+
         current_file_directory = os.path.dirname(os.path.abspath(__file__))
         eds_file = os.path.join(
             current_file_directory,
@@ -135,10 +141,13 @@ class ProportionalActuator(ActuatorRepository):
 
         return actuator
 
-    def _on_position_received(self, msg: PdoMap):
-        new_position = msg["POS_Display.POS_Display"].phys
-        self.position = new_position
-        logger.debug(f"Valve position received: {self.position}")
+    async def connect_current_position_websocket(
+        self, ws_id: int, websocket: WebSocket
+    ):
+        await self.current_position_websocket.connect(ws_id, websocket)
+
+    def disconnect_current_position_websocket(self, ws_id, websocket: WebSocket):
+        self.current_position_websocket.disconnect(ws_id, websocket)
 
     def disconnect(self):
         """
@@ -159,3 +168,10 @@ class ProportionalActuator(ActuatorRepository):
         logger.info(f"Node {self.node.id} set PRE-OPERATIONAL")
         self.network.disconnect()
         logger.info("Disconnected from CANopen Network")
+
+    def _on_position_received(self, msg: PdoMap):
+        new_position = float(msg["POS_Display.POS_Display"].phys)
+        self.position = new_position
+        logger.debug(f"Valve position received: {self.position}")
+        self.current_position_websocket.broadcast(0, self.position)
+        asyncio.run(self.current_position_websocket.broadcast(0, self.position))
