@@ -99,7 +99,7 @@ class InfluxConnector:
 
         point = (
             Point(sensor.type.value)
-            .field(field=sensor.id, value=sensor.current_reading.value)
+            .field(field="reading", value=sensor.current_reading.value)
             .tag(key="id", value=sensor.id)
             .time(
                 time=sensor.current_reading.timestamp_ns,
@@ -137,9 +137,9 @@ class InfluxConnector:
         """
         point = (
             Point(actuator.type.value)
-            .field(field=actuator.id, value=actuator.state)
+            .field(field="state", value=actuator.state)
             .tag(key="id", value=actuator.id)
-            .tag(key="state", value="set")
+            .tag(key="type", value="set")
             .time(time=timestamp_ns, write_precision=WritePrecision.NS)
         )
         self._write(point)
@@ -152,9 +152,9 @@ class InfluxConnector:
     ):
         point = (
             Point(ActuatorEnum.PROPORTIONAL.value)
-            .field(field=proportional_id, value=current_position)
+            .field(field="state", value=current_position)
             .tag(key="id", value=proportional_id)
-            .tag(key="state", value="current")
+            .tag(key="state_origin", value="current")
             .time(time=timestamp_ns, write_precision=WritePrecision.NS)
         )
         self._write(point)
