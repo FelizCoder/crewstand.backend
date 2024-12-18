@@ -57,7 +57,7 @@ def create_actuator_router(service: ActuatorService):
 
     @r.get("/{actuator_id}", response_model=service.item_type)
     def get_by_id(
-        actuator_id: Annotated[int, Path(..., ge=0, lt=service.actuator.count)]
+        actuator_id: Annotated[int, Path(..., ge=0, lt=service.actuator_repo.count)]
     ):
         """
         Retrieve a specific actuator by its ID.
@@ -71,7 +71,7 @@ def create_actuator_router(service: ActuatorService):
         return service.get_by_id(actuator_id)
 
     @r.post("/set", response_model=service.item_type)
-    def set_state(actuator: service.item_type):
+    async def set_state(actuator: service.item_type):
         """
         Set the state of a specific actuator.
 
@@ -81,7 +81,7 @@ def create_actuator_router(service: ActuatorService):
         Returns:
             service.item_type: The actuator object after its state has been updated.
         """
-        return service.set_state(actuator)
+        return await service.set_state(actuator)
 
     return r
 

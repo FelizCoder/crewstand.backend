@@ -59,6 +59,7 @@ class SensorService(Generic[T]):
             T: The updated sensor.
         """
         sensor = self.sensor.post_reading(sensor_id, reading)
+
         self.influx.write_sensor(sensor)
         await self.websocket_manager.broadcast(sensor_id, reading.model_dump_json())
 
