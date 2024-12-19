@@ -122,7 +122,7 @@ def create_actuator_router(service: ActuatorService):
         await proportional_service.connect_websocket(actuator_id, websocket)
         try:
             while True:
-                websocket.receive_text()
+                await websocket.receive_text()
         except WebSocketDisconnect:
             proportional_service.disconnect_websocket(actuator_id, websocket)
 
