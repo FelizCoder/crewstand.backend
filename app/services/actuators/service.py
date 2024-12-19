@@ -31,10 +31,11 @@ class ActuatorService(Generic[T]):
         self.item_type = item_type
 
         self.websocket_manager = WebSocketManager(self.actuator_repo.count)
-        self.influx = influx_connector
+        self.database = influx_connector
 
-        # Send initial states to Database and Websockets
-        asyncio.run(self._broadcast_all_actuators())
+        # Write initial states to Database
+        initial_actuators = self.actuator_repo.get_all()
+        self._write_actuators_to_db(initial_actuators)
 
     def get_all(self) -> List[T]:
         """
@@ -100,13 +101,16 @@ class ActuatorService(Generic[T]):
             If the actuator's ID is invalid (handled within _validate_actuator_id).
         """
         self._validate_actuator_id(actuator)
-        timestamp_ns = time.time_ns()
         self.actuator_repo.set_state(actuator)
+        timestamp_ns = time.time_ns()
 
         if actuator.id == -1:
-            await self._broadcast_all_actuators()
+            all_actuators = self.actuator_repo.get_all()
+            broadcast_coroutine = self._broadcast_actuators_states(all_actuators)
+            self._write_actuators_to_db(all_actuators, timestamp_ns)
+            await broadcast_coroutine
         else:
-            self.influx.write_actuator(actuator, timestamp_ns)
+            self.database.write_actuator(actuator, timestamp_ns)
             await self.websocket_manager.broadcast(actuator.id, actuator.state)
 
         return actuator
@@ -194,14 +198,14 @@ class ActuatorService(Generic[T]):
     ) -> None:
         pass
 
-    async def _broadcast_all_actuators(self):
+    async def _broadcast_actuators_states(self, actuators: List[Actuator]):
         """
-        Broadcast the current state of all actuators to connected clients.
+        Broadcast the current state of all actuators to connected WebSocket clients.
 
         Summary
         -------
-        This method simultaneously updates the InfluxDB with the current state of all
-        actuators and broadcasts their states to all connected WebSocket clients.
+        This method fetches all actuator states and broadcasts them asynchronously
+        to all connected WebSocket clients.
 
         Parameters
         ----------
@@ -211,37 +215,56 @@ class ActuatorService(Generic[T]):
         -------
         None
 
-        Notes
-        -----
-        This method is designed to be executed asynchronously, leveraging
-        `asyncio.gather` to run multiple broadcast tasks concurrently, ensuring
-        efficient dissemination of actuator states to all connected clients.
-        The current timestamp (in nanoseconds) is uniformly applied to all
-        actuators for synchronization purposes.
-
         See Also
         --------
         get_all : Retrieve a list of all actuators.
         websocket_manager.broadcast : Broadcast a message to connected clients.
-        influx.write_actuator : Write actuator data to InfluxDB.
 
         Warnings
         --------
-        This method is intended for internal use within the service and should not
-        be invoked directly from external interfaces.
+        For internal use within the service.
         """
         tasks = []
-        actuators = self.get_all()
-        timestamp_ns = time.time_ns()
 
         for actuator in actuators:
-            self.influx.write_actuator(actuator=actuator, timestamp_ns=timestamp_ns)
             broadcast_task = self.websocket_manager.broadcast(
                 index=actuator.id, message=actuator.state
             )
             tasks.append(broadcast_task)
 
         await asyncio.gather(*tasks)
+
+    def _write_actuators_to_db(
+        self, actuators: List[Actuator], timestamp_ns: int = time.time_ns()
+    ):
+        """
+        Write the current state of all actuators to the InfluxDB.
+
+        Summary
+        -------
+        This method updates the InfluxDB with the current state of all actuators,
+        applying a uniform timestamp for synchronization.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
+
+        See Also
+        --------
+        get_all : Retrieve a list of all actuators.
+        influx.write_actuator : Write actuator data to InfluxDB.
+
+        Warnings
+        --------
+        For internal use within the service.
+        """
+
+        for actuator in actuators:
+            self.database.write_actuator(actuator=actuator, timestamp_ns=timestamp_ns)
 
     def _validate_actuator_id(self, actuator: T):
         """
