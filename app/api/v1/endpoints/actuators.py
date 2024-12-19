@@ -83,7 +83,7 @@ def create_actuator_router(service: ActuatorService):
         """
         return await service.set_state(actuator)
 
-    @r.websocket("/{actuator_id}/state")
+    @r.websocket("/state/{actuator_id}")
     async def state_ws(
         websocket: WebSocket,
         actuator_id: Annotated[int, Path(..., ge=0, lt=service.actuator_repo.count)],
