@@ -36,7 +36,7 @@ def mock_websocket_manager():
 @pytest.fixture(name="service")
 def actuator_service(repository, influx, websocket):
     service = ActuatorService(repository, MockActuator)
-    service.influx = influx
+    service.database = influx
     service.websocket_manager = websocket
     return service
 
