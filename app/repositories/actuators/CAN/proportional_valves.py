@@ -178,7 +178,9 @@ class ProportionalActuator(ActuatorRepository):
         new_position = float(msg["POS_Display.POS_Display"].phys)
         self.current_position = new_position
         logger.debug(f"Valve position received: {self.current_position}")
-        asyncio.run(self.current_position_websocket.broadcast(0, self.current_position))
+        asyncio.run(
+            self.current_position_websocket.broadcast(0, str(self.current_position))
+        )
         self.influx.write_current_proportional_position(
             proportional_id=0, current_position=self.current_position
         )

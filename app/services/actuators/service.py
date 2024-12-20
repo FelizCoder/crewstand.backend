@@ -1,4 +1,5 @@
 import asyncio
+import json
 import time
 from typing import Generic, List, TypeVar
 from fastapi import HTTPException, WebSocket
@@ -111,7 +112,9 @@ class ActuatorService(Generic[T]):
             await broadcast_coroutine
         else:
             self.database.write_actuator(actuator, timestamp_ns)
-            await self.websocket_manager.broadcast(actuator.id, actuator.state)
+            await self.websocket_manager.broadcast(
+                actuator.id, json.dumps(actuator.state)
+            )
 
         return actuator
 
@@ -149,7 +152,7 @@ class ActuatorService(Generic[T]):
         await self.websocket_manager.connect(actuator_id, websocket)
 
         current_state = self.get_by_id(actuator_id).state
-        await websocket.send_text(str(current_state))
+        await websocket.send_text(json.dumps(current_state))
 
     def disconnect_websocket(self, actuator_id: int, websocket: WebSocket):
         """
@@ -228,7 +231,7 @@ class ActuatorService(Generic[T]):
 
         for actuator in actuators:
             broadcast_task = self.websocket_manager.broadcast(
-                index=actuator.id, message=actuator.state
+                index=actuator.id, message=json.dumps(actuator.state)
             )
             tasks.append(broadcast_task)
 
