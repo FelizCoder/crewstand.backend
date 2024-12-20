@@ -83,7 +83,7 @@ def create_actuator_router(service: ActuatorService):
         """
         return await service.set_state(actuator)
 
-    @r.websocket("/{actuator_id}/state")
+    @r.websocket("/state/{actuator_id}")
     async def state_ws(
         websocket: WebSocket,
         actuator_id: Annotated[int, Path(..., ge=0, lt=service.actuator_repo.count)],
@@ -119,12 +119,13 @@ def create_actuator_router(service: ActuatorService):
         proportional_service.connect_websocket : Connects a WebSocket to an actuator.
         proportional_service.disconnect_websocket : Disconnects a WebSocket from an actuator.
         """
-        await proportional_service.connect_websocket(actuator_id, websocket)
+        # TODO: Test interaction w/ frontend
+        await service.connect_websocket(actuator_id, websocket)
         try:
             while True:
-                websocket.receive_text()
+                await websocket.receive_text()
         except WebSocketDisconnect:
-            proportional_service.disconnect_websocket(actuator_id, websocket)
+            service.disconnect_websocket(actuator_id, websocket)
 
     return r
 

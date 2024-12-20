@@ -69,7 +69,7 @@ class InfluxConnector:
             token=token,
             org=org,
             debug=(settings.DEBUG_LEVEL == "DEBUG"),
-            timeout=50,
+            timeout=250,
         )
 
         self.write_api = self.client.write_api(write_options=SYNCHRONOUS)
