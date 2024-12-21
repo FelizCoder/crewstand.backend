@@ -1,13 +1,18 @@
 # pylint: disable=E1136
 
+import asyncio
 import os
 import canopen
 from canopen.pdo.base import PdoMap
 from typing import List
 
+from fastapi import WebSocket
+
 from app.models.actuators import ActuatorRepository, ProportionalValve
 from app.utils.logger import logger
 from app.utils.config import settings
+from app.utils.websocket_manager import WebSocketManager
+from app.utils.influx_client import influx_connector
 
 
 class ProportionalActuator(ActuatorRepository):
@@ -78,6 +83,9 @@ class ProportionalActuator(ActuatorRepository):
         self.count = 1  # Only the default setting for one Bürkert MotorValve 3280 is supported at the moment
         self.item_type = ProportionalValve
 
+        self.current_position_websocket = WebSocketManager(count=self.count)
+        self.influx = influx_connector
+
         current_file_directory = os.path.dirname(os.path.abspath(__file__))
         eds_file = os.path.join(
             current_file_directory,
@@ -101,7 +109,7 @@ class ProportionalActuator(ActuatorRepository):
         )
 
         # get the initial position of the Valve
-        self.position: float = self.node.sdo["POS_Display.POS_Display"].phys
+        self.current_position: float = self.node.sdo["POS_Display.POS_Display"].phys
 
         # Read the PDO object dictionaries
         self.node.rpdo.read(from_od=True)
@@ -112,7 +120,7 @@ class ProportionalActuator(ActuatorRepository):
 
         # Initialize the position command for RPDO transmission
         self.position_command = self.node.rpdo[1]["CMDdigital.CMDdigital"]
-        self.position_command.phys = self.position
+        self.position_command.phys = self.current_position
 
         # Activate the node
         self.node.nmt.state = "OPERATIONAL"
@@ -123,10 +131,13 @@ class ProportionalActuator(ActuatorRepository):
         return [self.get_by_id()]
 
     def get_by_id(self, actuator_id: int = 0) -> ProportionalValve:
-        rounded_position = round(self.position)
-        clipped_position = max(0, min(100, rounded_position))
+        clipped_position = max(0, min(100, self.current_position))
 
-        return ProportionalValve(id=actuator_id, state=clipped_position)
+        return ProportionalValve(
+            id=actuator_id,
+            state=float(self.position_command.phys),
+            current_position=clipped_position,
+        )
 
     def set_state(self, actuator: ProportionalValve):
         # Assuming you set command using TPDO and RPDO data
@@ -135,10 +146,13 @@ class ProportionalActuator(ActuatorRepository):
 
         return actuator
 
-    def _on_position_received(self, msg: PdoMap):
-        new_position = msg["POS_Display.POS_Display"].phys
-        self.position = new_position
-        logger.debug(f"Valve position received: {self.position}")
+    async def connect_current_position_websocket(
+        self, ws_id: int, websocket: WebSocket
+    ):
+        await self.current_position_websocket.connect(ws_id, websocket)
+
+    def disconnect_current_position_websocket(self, ws_id: int, websocket: WebSocket):
+        self.current_position_websocket.disconnect(ws_id, websocket)
 
     def disconnect(self):
         """
@@ -159,3 +173,14 @@ class ProportionalActuator(ActuatorRepository):
         logger.info(f"Node {self.node.id} set PRE-OPERATIONAL")
         self.network.disconnect()
         logger.info("Disconnected from CANopen Network")
+
+    def _on_position_received(self, msg: PdoMap):
+        new_position = float(msg["POS_Display.POS_Display"].phys)
+        self.current_position = new_position
+        logger.debug(f"Valve position received: {self.current_position}")
+        asyncio.run(
+            self.current_position_websocket.broadcast(0, str(self.current_position))
+        )
+        self.influx.write_current_proportional_position(
+            proportional_id=0, current_position=self.current_position
+        )

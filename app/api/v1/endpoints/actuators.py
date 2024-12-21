@@ -1,6 +1,6 @@
 # app/api/v1/endpoints/actuators.py
 from typing import Annotated, List, Union
-from fastapi import APIRouter, Path
+from fastapi import APIRouter, Path, WebSocket, WebSocketDisconnect
 
 from app.models.actuators import SolenoidValve, ProportionalValve, Pump
 from app.services.actuators.proportional import ProportionalService
@@ -57,7 +57,7 @@ def create_actuator_router(service: ActuatorService):
 
     @r.get("/{actuator_id}", response_model=service.item_type)
     def get_by_id(
-        actuator_id: Annotated[int, Path(..., ge=0, lt=service.actuator.count)]
+        actuator_id: Annotated[int, Path(..., ge=0, lt=service.actuator_repo.count)]
     ):
         """
         Retrieve a specific actuator by its ID.
@@ -71,7 +71,7 @@ def create_actuator_router(service: ActuatorService):
         return service.get_by_id(actuator_id)
 
     @r.post("/set", response_model=service.item_type)
-    def set_state(actuator: service.item_type):
+    async def set_state(actuator: service.item_type):
         """
         Set the state of a specific actuator.
 
@@ -81,9 +81,109 @@ def create_actuator_router(service: ActuatorService):
         Returns:
             service.item_type: The actuator object after its state has been updated.
         """
-        return service.set_state(actuator)
+        return await service.set_state(actuator)
+
+    @r.websocket("/state/{actuator_id}")
+    async def state_ws(
+        websocket: WebSocket,
+        actuator_id: Annotated[int, Path(..., ge=0, lt=service.actuator_repo.count)],
+    ):
+        """
+        Establish a WebSocket connection for an actuator state updates.
+
+        Parameters
+        ----------
+        websocket : WebSocket
+            The WebSocket object to establish a connection with.
+        actuator_id : int
+            The ID of the actuator to receive state updates for. Must be within the range
+            [0, service.actuator_repo.count).
+
+        Returns
+        -------
+        None
+
+        Notes
+        -----
+        This function establishes a WebSocket connection with the provided `websocket` object
+        and starts listening for state updates for the specified `actuator_id`. The connection
+        remains open until a WebSocket disconnect occurs.
+
+        Raises
+        ------
+        WebSocketDisconnect
+            If the WebSocket connection is disconnected.
+
+        See Also
+        --------
+        proportional_service.connect_websocket : Connects a WebSocket to an actuator.
+        proportional_service.disconnect_websocket : Disconnects a WebSocket from an actuator.
+        """
+        # TODO: Test interaction w/ frontend
+        await service.connect_websocket(actuator_id, websocket)
+        try:
+            while True:
+                await websocket.receive_text()
+        except WebSocketDisconnect:
+            service.disconnect_websocket(actuator_id, websocket)
 
     return r
+
+
+proportional_router = create_actuator_router(proportional_service)
+
+
+@proportional_router.websocket("/{proportional_id}/current_position")
+async def current_position_ws(
+    websocket: WebSocket,
+    proportional_id: Annotated[
+        int, Path(..., ge=0, lt=proportional_service.actuator_repo.count)
+    ],
+):
+    """
+    Establish a WebSocket connection for current position updates of a proportional actuator.
+
+    Parameters
+    ----------
+    websocket : WebSocket
+        The WebSocket object to establish a connection with.
+    proportional_id : int
+        The ID of the proportional actuator to receive current position updates for. Must be within the range
+        [0, proportional_service.actuator_repo.count).
+
+    Returns
+    -------
+    None
+
+    Notes
+    -----
+    This function establishes a WebSocket connection with the provided `websocket` object and starts listening for
+    current position updates for the specified `proportional_id`. The connection remains open until a WebSocket
+    disconnect occurs.
+
+    Raises
+    ------
+    WebSocketDisconnect
+        If the WebSocket connection is disconnected.
+
+    See Also
+    --------
+    proportional_service.connect_current_position_websocket : Connects a WebSocket to a proportional actuator for current position updates.
+    proportional_service.disconnect_current_position_websocket : Disconnects a WebSocket from a proportional actuator for current position updates.
+    """
+    await proportional_service.connect_current_position_websocket(
+        proportional_id, websocket
+    )
+
+    try:
+        # Stay connected to the websocket
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        # Handle the websocket disconnection
+        proportional_service.disconnect_current_position_websocket(
+            proportional_id, websocket
+        )
 
 
 # Import routers using the create_router function
@@ -93,7 +193,7 @@ router.include_router(
     tags=["Solenoid Valves"],
 )
 router.include_router(
-    create_actuator_router(proportional_service),
+    proportional_router,
     prefix="/proportional",
     tags=["Proportional Valves"],
 )
