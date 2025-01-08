@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/FelizCoder/crewstand.backend/compare/v1.0.0...v1.1.0) (2025-01-08)
+
+
+### Features
+
+* **actuators, websocket, influx:** Enhance Actuator WebSocket Connectivity & Influx Timeout ([6210e19](https://github.com/FelizCoder/crewstand.backend/commit/6210e19c39e8ade922997f2c52873f3c22cab617))
+* **ActuatorService:** Enhance Actuator State Management with WebSocket and InfluxDB Integration ([14ac37b](https://github.com/FelizCoder/crewstand.backend/commit/14ac37becbd8d3ee6fcd6902c329fda8da746a0e))
+* **app/utils/influx_client:** Enhance InfluxConnector with improved documentation, error handling, and refactored write operations ([63ac241](https://github.com/FelizCoder/crewstand.backend/commit/63ac241dbdd326b274b9f1033190367388ca763c)), closes [#67](https://github.com/FelizCoder/crewstand.backend/issues/67)
+* **influx_client:** Standardize Field Keys & Introduce "state_origin" Tag ([3e0c32f](https://github.com/FelizCoder/crewstand.backend/commit/3e0c32f4f4eab8193df0eaa842c16558931f8c32))
+* Introduce WebSocket Support for Real-time Actuator State Updates ([e330927](https://github.com/FelizCoder/crewstand.backend/commit/e33092757d71037908a973ffa04a157eb3842a76)), closes [#53](https://github.com/FelizCoder/crewstand.backend/issues/53)
+* **ProportionalActuator:** Enhance with current position tracking and InfluxDB logging ([d8c6314](https://github.com/FelizCoder/crewstand.backend/commit/d8c63148b69c323f0756aab17e1d95eec3d21e1b))
+
 ## [1.0.0](https://github.com/FelizCoder/crewstand.backend/compare/v0.11.0...v1.0.0) (2024-12-16)
 
 
