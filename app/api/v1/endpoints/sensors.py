@@ -1,7 +1,7 @@
 from typing import Annotated, List, Union
 from fastapi import APIRouter, Path, WebSocket, WebSocketDisconnect
 
-from app.models.sensors import Flowmeter, SensorReading
+from app.models.sensors import Flowmeter, SensorReading, Setpoint
 from app.services.sensors.service import SensorService
 from app.services.sensors.flowmeter import FlowmeterService
 
@@ -94,14 +94,35 @@ class SensorRouter(APIRouter):
             websocket: WebSocket,
             sensor_id: Annotated[int, Path(..., ge=0, lt=self.service.sensor.count)],
         ):
-            await self.service.connect_websocket(sensor_id, websocket)
+            await self.service.connect_reading_ws(sensor_id, websocket)
             try:
                 # Stay connected to the websocket
                 while True:
                     await websocket.receive_text()
             except WebSocketDisconnect:
                 # Handle the websocket disconnection
-                self.service.disconnect_websocket(sensor_id, websocket)
+                self.service.disconnect_reading_ws(sensor_id, websocket)
+
+        @self.post("/{sensor_id}/setpoint", response_model=self.service.item_type)
+        async def post_setpoint(
+            sensor_id: Annotated[int, Path(..., ge=0, lt=self.service.sensor.count)],
+            request: Setpoint,
+        ):
+            return await self.service.post_setpoint(sensor_id, request.setpoint)
+
+        @self.websocket("/ws/setpoint/{sensor_id}")
+        async def websocket_setpoint_endpoint(
+            websocket: WebSocket,
+            sensor_id: Annotated[int, Path(..., ge=0, lt=self.service.sensor.count)],
+        ):
+            await self.service.connect_setpoint_ws(sensor_id, websocket)
+            try:
+                # Stay connected to the websocket
+                while True:
+                    await websocket.receive_text()
+            except WebSocketDisconnect:
+                # Handle the websocket disconnection
+                self.service.disconnect_setpoint_ws(sensor_id, websocket)
 
 
 # Import routers using the create_sensor_router function

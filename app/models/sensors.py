@@ -1,3 +1,4 @@
+import time
 from typing import Generic, List, Literal, TypeVar, Union
 from enum import Enum
 from pydantic import BaseModel, Field
@@ -16,17 +17,21 @@ class SensorReading(BaseModel):
     timestamp_ns: int = Field(
         ...,
         description="Timestamp of the reading in nanoseconds since Epoch",
-        examples=[1730906908814683100],
+        examples=[time.time_ns()],
     )
 
 
-class Sensor(BaseModel):
+class Setpoint(BaseModel):
+    setpoint: Union[float, None] = None
+
+
+class Sensor(Setpoint):
     """Base model for an sensor."""
 
     type: SensorEnum
+    unit: str = Field(..., examples=["l/min", "°C", "bar", "V"])
     id: int = Field(..., ge=0, examples=[0, 1, 2])
     current_reading: Union[SensorReading, None] = None
-    unit: str = Field(..., examples=["l/min", "°C", "bar", "V"])
 
 
 class Flowmeter(Sensor):
@@ -42,7 +47,7 @@ T = TypeVar("T", bound=Sensor)
 class SensorRepository(Generic[T]):
     """Repository for managing sensor records."""
 
-    item_type: T
+    item_type: T = T
     count: int
 
     def get_all(self) -> List[T]:
@@ -53,6 +58,10 @@ class SensorRepository(Generic[T]):
         """Retrieve an Sensor by its ID."""
         raise NotImplementedError
 
-    def post_reading(self, sensor_id, reading: SensorReading) -> T:
-        """Update the state of an actuator."""
-        return NotImplementedError
+    def post_reading(self, sensor_id: int, reading: SensorReading) -> T:
+        """Update the state of a Sensor with a new reading."""
+        raise NotImplementedError
+
+    def post_setpoint(self, sensor_id: int, setpoint: Union[float, None]) -> T:
+        """Update the setpoint of a parameter"""
+        raise NotImplementedError

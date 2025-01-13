@@ -4,7 +4,7 @@ from app.utils.logger import logger
 from app.utils.config import settings
 
 
-class FlowmeterSensor(SensorRepository):
+class FlowmeterSensor(SensorRepository[Flowmeter]):
     """
     FlowmeterSensor is a repository for managing flowmeter sensor data.
 
@@ -32,8 +32,6 @@ class FlowmeterSensor(SensorRepository):
     """
 
     def __init__(self):
-        self.item_type = Flowmeter
-
         self.flowmeters = [Flowmeter(id=i) for i in range(settings.FLOWMETER_COUNT)]
         self.count = len(self.flowmeters)
 
@@ -53,4 +51,9 @@ class FlowmeterSensor(SensorRepository):
         self.flowmeters[sensor_id].current_reading = reading
         logger.debug("Flowmeter %d reading patched: %s", sensor_id, reading)
 
+        return self.flowmeters[sensor_id]
+
+    def post_setpoint(self, sensor_id, setpoint):
+        self.flowmeters[sensor_id].setpoint = setpoint
+        logger.debug("Flowmeter %d setpoint patched: %s", sensor_id, setpoint)
         return self.flowmeters[sensor_id]
