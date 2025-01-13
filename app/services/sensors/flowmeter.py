@@ -15,4 +15,4 @@ class FlowmeterService(SensorService[Flowmeter]):
 
     def __init__(self):
         sensor_repository = FlowmeterSensor()
-        super().__init__(sensor_repository, Flowmeter)
+        super().__init__(sensor_repository)

@@ -101,6 +101,7 @@ class InfluxConnector:
         point = (
             Point(sensor.type.value)
             .field(field="reading", value=sensor.current_reading.value)
+            .field(field="setpoint", value=sensor.setpoint)
             .tag(key="id", value=sensor.id)
             .time(
                 time=sensor.current_reading.timestamp_ns,
