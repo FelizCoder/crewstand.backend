@@ -586,6 +586,29 @@
         }
       }
     },
+    "/v1/info/version": {
+      "get": {
+        "tags": [
+          "Backend Info"
+        ],
+        "summary": "Get Version",
+        "description": "**Summary**\n\nRetrieves the current version information of the application.\n\n**Parameters**\n\nNone\n\n**Returns**\n\nstr\n    The version information of the application, as defined in `settings.VERSION`.\n\n**Notes**\n\nThis endpoint provides a simple way to determine the version of the API.\nThe version information is sourced from the application's settings.\n\n**Examples**\n\n>>> response = get_version()\n>>> print(response)\n# Output: <current_version_string> (e.g., \"1.2.3\")",
+        "operationId": "get_version_v1_info_version_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "title": "Response Get Version V1 Info Version Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "summary": "Root",
@@ -833,7 +856,7 @@
             "title": "Timestamp Ns",
             "description": "Timestamp of the reading in nanoseconds since Epoch",
             "examples": [
-              1736774429215684900
+              1736948968360412500
             ]
           }
         },
