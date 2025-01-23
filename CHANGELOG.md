@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/FelizCoder/crewstand.backend/compare/v1.1.0...v1.2.0) (2025-01-23)
+
+
+### Features
+
+* **api:** add `/v1/info/version` endpoint ([c05d637](https://github.com/FelizCoder/crewstand.backend/commit/c05d637145d32503715bffda3d60cf4b8ac447a7))
+* **sensors:** Enhance Sensor Model & API with Setpoint Management ([472bf6b](https://github.com/FelizCoder/crewstand.backend/commit/472bf6bbe5457945ffc0da3650b8a56dba3d7ce6)), closes [#63](https://github.com/FelizCoder/crewstand.backend/issues/63)
+
 ## [1.1.0](https://github.com/FelizCoder/crewstand.backend/compare/v1.0.0...v1.1.0) (2025-01-08)
 
 
