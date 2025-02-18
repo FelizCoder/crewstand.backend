@@ -110,7 +110,7 @@ class InfluxConnector:
         )
         self._write(point)
 
-    def write_actuator(self, actuator: Actuator, timestamp_ns: int = time.time_ns()):
+    def write_actuator(self, actuator: Actuator, timestamp_ns: int):
         """
         Summary
         ----------
@@ -150,7 +150,7 @@ class InfluxConnector:
         self,
         proportional_id: int,
         current_position: float,
-        timestamp_ns: int = time.time_ns(),
+        timestamp_ns: int,
     ):
         point = (
             Point(ActuatorEnum.PROPORTIONAL.value)
