@@ -32,7 +32,7 @@ class ProportionalValve(Actuator):
 
     type: Literal[ActuatorEnum.PROPORTIONAL] = ActuatorEnum.PROPORTIONAL
     state: float = Field(..., ge=0, le=100)
-    current_position: float | None = Field(default=None, ge=0, le=100)
+    current_position: float | None = Field(default=None)
 
 
 class Pump(Actuator):

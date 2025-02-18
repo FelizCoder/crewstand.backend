@@ -120,7 +120,8 @@ class ProportionalActuator(ActuatorRepository):
 
         # Initialize the position command for RPDO transmission
         self.position_command = self.node.rpdo[1]["CMDdigital.CMDdigital"]
-        self.position_command.phys = self.current_position
+        # Clip to ensure within range
+        self.position_command.phys = max(0, min(100, self.current_position))
 
         # Activate the node
         self.node.nmt.state = "OPERATIONAL"
@@ -131,12 +132,10 @@ class ProportionalActuator(ActuatorRepository):
         return [self.get_by_id()]
 
     def get_by_id(self, actuator_id: int = 0) -> ProportionalValve:
-        clipped_position = max(0, min(100, self.current_position))
-
         return ProportionalValve(
             id=actuator_id,
             state=float(self.position_command.phys),
-            current_position=clipped_position,
+            current_position=self.current_position,
         )
 
     def set_state(self, actuator: ProportionalValve):
