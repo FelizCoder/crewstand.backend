@@ -2,6 +2,7 @@
 
 import asyncio
 import os
+import time
 import canopen
 from canopen.pdo.base import PdoMap
 from typing import List
@@ -181,5 +182,7 @@ class ProportionalActuator(ActuatorRepository):
             self.current_position_websocket.broadcast(0, str(self.current_position))
         )
         self.influx.write_current_proportional_position(
-            proportional_id=0, current_position=self.current_position
+            proportional_id=0,
+            current_position=self.current_position,
+            timestamp_ns=time.time_ns(),
         )
