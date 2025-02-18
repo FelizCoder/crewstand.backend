@@ -156,7 +156,7 @@ class InfluxConnector:
             Point(ActuatorEnum.PROPORTIONAL.value)
             .field(field="state", value=current_position)
             .tag(key="id", value=proportional_id)
-            .tag(key="state_origin", value="current")
+            .tag(key="type", value="current")
             .time(time=timestamp_ns, write_precision=WritePrecision.NS)
         )
         self._write(point)
