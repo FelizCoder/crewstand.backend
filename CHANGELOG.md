@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.1](https://github.com/FelizCoder/crewstand.backend/compare/v1.2.0...v1.2.1) (2025-02-18)
+
+
+### Bug Fixes
+
+* **actuators & logging:** ensure accurate timestamping for proportional actuator positions ([0ff032a](https://github.com/FelizCoder/crewstand.backend/commit/0ff032ab8e4ae6589a1296eec1f38809d9dcd914)), closes [#74](https://github.com/FelizCoder/crewstand.backend/issues/74)
+* ensure ProportionalValve state is within range ([1d30ff5](https://github.com/FelizCoder/crewstand.backend/commit/1d30ff50f9f530424ff93541e8105f9e6ab92c90)), closes [#72](https://github.com/FelizCoder/crewstand.backend/issues/72)
+* **influx:** change state_origin tag to type in Influx write ([b4156f6](https://github.com/FelizCoder/crewstand.backend/commit/b4156f62aa1740da34274a814006458badc3b383)), closes [#74](https://github.com/FelizCoder/crewstand.backend/issues/74)
+
 ## [1.2.0](https://github.com/FelizCoder/crewstand.backend/compare/v1.1.0...v1.2.0) (2025-01-23)
 
 
