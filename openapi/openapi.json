@@ -609,6 +609,47 @@
         }
       }
     },
+    "/v1/missions/queue": {
+      "post": {
+        "tags": [
+          "Missions"
+        ],
+        "summary": "Post Mission To Queue",
+        "operationId": "post_mission_to_queue_v1_missions_queue_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlowControlMission"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlowControlMission"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "summary": "Root",
@@ -629,6 +670,47 @@
   },
   "components": {
     "schemas": {
+      "FlowControlMission": {
+        "properties": {
+          "valve_id": {
+            "type": "integer",
+            "minimum": -1.0,
+            "title": "Valve Id",
+            "description": "ID of the valve to steer",
+            "examples": [
+              1,
+              2,
+              3
+            ]
+          },
+          "flow_trajectory": {
+            "items": {
+              "$ref": "#/components/schemas/TrajectoryPoint"
+            },
+            "type": "array",
+            "title": "Flow Trajectory",
+            "description": "Definition of the Flow Trajectory. A list of TrajectoryPoint instances, where each point defines the flow rate until a specific time",
+            "examples": [
+              [
+                [
+                  10,
+                  22.2
+                ],
+                [
+                  20,
+                  11.1
+                ]
+              ]
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "valve_id",
+          "flow_trajectory"
+        ],
+        "title": "FlowControlMission"
+      },
       "Flowmeter": {
         "properties": {
           "setpoint": {
@@ -658,7 +740,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": 0,
+            "minimum": 0.0,
             "title": "Id",
             "examples": [
               0,
@@ -710,7 +792,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -720,16 +802,14 @@
           },
           "state": {
             "type": "number",
-            "maximum": 100,
-            "minimum": 0,
+            "maximum": 100.0,
+            "minimum": 0.0,
             "title": "State"
           },
           "current_position": {
             "anyOf": [
               {
-                "type": "number",
-                "maximum": 100,
-                "minimum": 0
+                "type": "number"
               },
               {
                 "type": "null"
@@ -759,7 +839,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -801,14 +881,14 @@
             "title": "Unit",
             "examples": [
               "l/min",
-              "°C",
+              "\u00b0C",
               "bar",
               "V"
             ]
           },
           "id": {
             "type": "integer",
-            "minimum": 0,
+            "minimum": 0.0,
             "title": "Id",
             "examples": [
               0,
@@ -856,7 +936,7 @@
             "title": "Timestamp Ns",
             "description": "Timestamp of the reading in nanoseconds since Epoch",
             "examples": [
-              1736948968360412400
+              1740149966158118100
             ]
           }
         },
@@ -898,7 +978,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -918,6 +998,21 @@
         ],
         "title": "SolenoidValve",
         "description": "Model representing a solenoid valve actuator."
+      },
+      "TrajectoryPoint": {
+        "prefixItems": [
+          {
+            "type": "number",
+            "title": "Time"
+          },
+          {
+            "type": "number",
+            "title": "Flow Rate"
+          }
+        ],
+        "type": "array",
+        "maxItems": 2,
+        "minItems": 2
       },
       "ValidationError": {
         "properties": {
