@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/FelizCoder/crewstand.backend/compare/v1.2.1...v1.3.0) (2025-02-25)
+
+
+### Features
+
+* **missions:** add endpoint to post mission to queue ([14b0758](https://github.com/FelizCoder/crewstand.backend/commit/14b07588051a5b64a5c84dc92e78ad46aea798f6)), closes [#77](https://github.com/FelizCoder/crewstand.backend/issues/77)
+* **missions:** implement flow control mission execution ([98e2475](https://github.com/FelizCoder/crewstand.backend/commit/98e2475ac7171da49357cc93fd605567acdc7ddc)), closes [#77](https://github.com/FelizCoder/crewstand.backend/issues/77)
+
 ## [1.2.1](https://github.com/FelizCoder/crewstand.backend/compare/v1.2.0...v1.2.1) (2025-02-18)
 
 
