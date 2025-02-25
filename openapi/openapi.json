@@ -609,13 +609,14 @@
         }
       }
     },
-    "/v1/missions/queue": {
+    "/v1/missions/flow/queue": {
       "post": {
         "tags": [
-          "Missions"
+          "Flow Missions"
         ],
-        "summary": "Post Mission To Queue",
-        "operationId": "post_mission_to_queue_v1_missions_queue_post",
+        "summary": "Add To Queue",
+        "description": "Add a new mission to the queue.",
+        "operationId": "add_to_queue_v1_missions_flow_queue_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -643,6 +644,89 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/missions/flow/current": {
+      "get": {
+        "tags": [
+          "Flow Missions"
+        ],
+        "summary": "Get Current",
+        "description": "Get the currently executing mission.",
+        "operationId": "get_current_v1_missions_flow_current_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/FlowControlMission"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Get Current V1 Missions Flow Current Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/missions/flow/next": {
+      "get": {
+        "tags": [
+          "Flow Missions"
+        ],
+        "summary": "Get Next",
+        "description": "Get the next mission in the queue.",
+        "operationId": "get_next_v1_missions_flow_next_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/FlowControlMission"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Get Next V1 Missions Flow Next Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/missions/flow/queue/length": {
+      "get": {
+        "tags": [
+          "Flow Missions"
+        ],
+        "summary": "Get Queue Length",
+        "description": "Get the current length of the mission queue.",
+        "operationId": "get_queue_length_v1_missions_flow_queue_length_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "title": "Response Get Queue Length V1 Missions Flow Queue Length Get"
                 }
               }
             }
@@ -709,7 +793,8 @@
           "valve_id",
           "flow_trajectory"
         ],
-        "title": "FlowControlMission"
+        "title": "FlowControlMission",
+        "description": "A class representing a flow control mission for a specific valve.\n\nThis class defines a mission that controls the flow rate of a specified valve over time\nby following a predefined trajectory of time and flow rate points.\n\nParameters\n----------\nvalve_id : int\n    The ID of the valve to control.\nflow_trajectory : list of TrajectoryPoint\n    A list of TrajectoryPoint instances, each specifying a time and the desired flow rate\n    until that time is reached.\n\nRaises\n------\nValueError\n    If the flow trajectory is empty, contains negative time or flow rate values,\n    or if the time values are not in strictly ascending order.\n\nExamples\n--------\n>>> from app.models.missions import FlowControlMission, TrajectoryPoint\n>>> mission = FlowControlMission(\n...     valve_id=1,\n...     flow_trajectory=[\n...         TrajectoryPoint(time=10, flow_rate=22.2),\n...         TrajectoryPoint(time=20, flow_rate=11.1)\n...     ]\n... )\n>>> print(mission.valve_id)\n1"
       },
       "Flowmeter": {
         "properties": {
@@ -936,7 +1021,7 @@
             "title": "Timestamp Ns",
             "description": "Timestamp of the reading in nanoseconds since Epoch",
             "examples": [
-              1740149966158118100
+              1740491541298927396
             ]
           }
         },
