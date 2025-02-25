@@ -1,4 +1,5 @@
-from typing import NamedTuple
+from abc import ABC, abstractmethod
+from typing import NamedTuple, Optional
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -81,3 +82,46 @@ class FlowControlMission(BaseModel):
             previous_time = time
 
         return trajectory
+
+
+class MissionRepository(ABC):
+    """
+    Abstract base class for mission repository implementations.
+    Defines the interface for managing mission queue operations.
+    """
+
+    @abstractmethod
+    def add_to_queue(self, mission: FlowControlMission) -> None:
+        """
+        Add a mission to the queue.
+
+        Args:
+            mission: The FlowControlMission to be added to the queue
+        """
+
+    @abstractmethod
+    def get_current_mission(self) -> FlowControlMission:
+        """
+        Retrieve the current active mission.
+
+        Returns:
+            FlowControlMission: The current active mission
+        """
+
+    @abstractmethod
+    def get_next_mission(self) -> Optional[FlowControlMission]:
+        """
+        Retrieve the next mission in the queue.
+
+        Returns:
+            Optional[FlowControlMission]: The next mission if available, None otherwise
+        """
+
+    @abstractmethod
+    def get_queue_length(self) -> int:
+        """
+        Get the current length of the mission queue.
+
+        Returns:
+            int: The number of missions in the queue
+        """
