@@ -1,14 +1,13 @@
 from collections import deque
 from typing import Optional, Deque
 import asyncio
-import logging
 
 from app.models.missions import MissionRepository, FlowControlMission
 from app.models.actuators import SolenoidValve
 from app.services.actuators.solenoid import SolenoidService
 from app.services.sensors.flowmeter import FlowmeterService
+from app.utils.logger import logger
 
-logger = logging.getLogger(__name__)
 
 class FlowMissionRepository(MissionRepository):
     """
@@ -17,10 +16,10 @@ class FlowMissionRepository(MissionRepository):
     """
 
     def __init__(
-        self, 
+        self,
         actuator_service: SolenoidService,
         sensor_service: FlowmeterService,
-        flow_sensor_id: int
+        flow_sensor_id: int,
     ) -> None:
         """
         Initialize the FlowMissionRepository.
@@ -86,19 +85,17 @@ class FlowMissionRepository(MissionRepository):
         for point in mission.flow_trajectory:
             # Set new flow setpoint
             await self.flowmeter_service.post_setpoint(
-                self.flow_sensor_id, 
-                point.flow_rate
+                self.flow_sensor_id, point.flow_rate
             )
-                        # Calculate wait time from previous point
+            # Calculate wait time from previous point
             wait_time = point.time - previous_time
             if wait_time > 0:
                 await asyncio.sleep(wait_time)
-            
+
             previous_time = point.time
-            
 
         # Reset flow setpoint
-        await self.flowmeter_service.post_setpoint(self.flow_sensor_id, 0)
+        await self.flowmeter_service.post_setpoint(self.flow_sensor_id, None)
 
         # Close the valve
         valve.state = False
