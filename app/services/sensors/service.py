@@ -1,5 +1,5 @@
 import json
-from typing import Generic, List, TypeVar
+from typing import Generic, List, Optional, TypeVar
 from fastapi import WebSocket
 
 from app.models.sensors import Sensor, SensorReading, SensorRepository
@@ -124,7 +124,7 @@ class SensorService(Generic[T]):
         """
         self.reading_ws.disconnect(sensor_id, websocket)
 
-    async def post_setpoint(self, sensor_id: int, setpoint: float) -> T:
+    async def post_setpoint(self, sensor_id: int, setpoint: Optional[float]) -> T:
         """
         Update the setpoint for a sensor and broadcast the change.
 
@@ -157,6 +157,8 @@ class SensorService(Generic[T]):
         influx.write_sensor : Persistence of sensor data.
         setpoint_ws.broadcast : Broadcasting setpoint updates to clients.
         """
+        if setpoint is not None:
+            setpoint = float(setpoint)
 
         sensor = self.sensor.post_setpoint(sensor_id, setpoint)
 

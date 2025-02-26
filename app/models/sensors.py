@@ -1,5 +1,5 @@
 import time
-from typing import Generic, List, Literal, TypeVar, Union
+from typing import Generic, List, Literal, Optional, TypeVar
 from enum import Enum
 from pydantic import BaseModel, Field
 
@@ -22,7 +22,7 @@ class SensorReading(BaseModel):
 
 
 class Setpoint(BaseModel):
-    setpoint: Union[float, None] = None
+    setpoint: Optional[float] = None
 
 
 class Sensor(Setpoint):
@@ -31,7 +31,7 @@ class Sensor(Setpoint):
     type: SensorEnum
     unit: str = Field(..., examples=["l/min", "°C", "bar", "V"])
     id: int = Field(..., ge=0, examples=[0, 1, 2])
-    current_reading: Union[SensorReading, None] = None
+    current_reading: Optional[SensorReading] = None
 
 
 class Flowmeter(Sensor):
@@ -62,6 +62,6 @@ class SensorRepository(Generic[T]):
         """Update the state of a Sensor with a new reading."""
         raise NotImplementedError
 
-    def post_setpoint(self, sensor_id: int, setpoint: Union[float, None]) -> T:
+    def post_setpoint(self, sensor_id: int, setpoint: Optional[float]) -> T:
         """Update the setpoint of a parameter"""
         raise NotImplementedError
