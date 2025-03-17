@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from typing import Optional
 from app.models.missions import FlowControlMission
 from app.services.missions.flow import FlowMissionService
@@ -35,3 +35,17 @@ class FlowMissionRouter(APIRouter):
         async def get_queue_length() -> int:
             """Get the current length of the mission queue."""
             return self.service.get_queue_length()
+
+        @self.websocket("/completed")
+        async def completed_missions_ws(websocket: WebSocket):
+            await self.service.mission_repo.connect_completed_mission_websocket(
+                websocket
+            )
+
+            try:
+                while True:
+                    await websocket.receive_text()
+            except WebSocketDisconnect:
+                await self.service.mission_repo.disconnect_completed_mission_websocket(
+                    websocket
+                )
