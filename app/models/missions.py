@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
+from datetime import time
+from enum import Enum
 from typing import NamedTuple, Optional
+from fastapi import WebSocket
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -13,6 +16,18 @@ class TrajectoryPoint(NamedTuple):
 
     time: float
     flow_rate: float
+
+
+class EndUseType(str, Enum):
+    """Enumeration of possible end use types for simulations"""
+
+    SHOWER = "Shower"
+    TOILET = "Toilet"
+    FAUCET = "Faucet"
+    CLOTHES_WASHER = "ClothesWasher"
+    DISHWASHER = "Dishwasher"
+    BATHTUB = "Bathtub"
+    OTHER = "other"
 
 
 class FlowControlMission(BaseModel):
@@ -58,6 +73,21 @@ class FlowControlMission(BaseModel):
         description="Definition of the Flow Trajectory. A list of TrajectoryPoint instances, where each point defines the flow rate until a specific time",
         examples=[[(10, 22.2), (20, 11.1)]],
     )
+    # Optional simulation details
+    actual_end_use: Optional[EndUseType] = Field(
+        None, description="The actual end use type for simulation purposes"
+    )
+    actual_duration: Optional[float] = Field(
+        None,
+        description="The actual duration of the simulated event in seconds",
+        ge=0,
+        examples=[3600, 30],
+    )
+    actual_start_time: Optional[time] = Field(
+        None,
+        description="The time of day when the simulated event starts (HH:MM:SS)",
+        examples=[time(11, 11, 11), time(16, 2, 42)],
+    )
 
     @field_validator("flow_trajectory")
     @classmethod
@@ -82,6 +112,31 @@ class FlowControlMission(BaseModel):
             previous_time = time
 
         return trajectory
+
+
+class CompletedFlowControlMission(BaseModel):
+    """
+    Represents a completed flow control mission.
+
+    Attributes:
+    -----------
+    flow_control_mission : FlowControlMission
+        The completed FlowControlMission.
+    start_ns : int
+        The timestamp the mission started with nanosecond precision.
+    end_ns : int
+        The timestamp the mission was completed with nanosecond precision.
+    """
+
+    flow_control_mission: FlowControlMission
+    start_ts: datetime = Field(
+        ...,
+        description="The timestamp the mission started with nanosecond precision",
+    )
+    end_ns: int = Field(
+        ...,
+        description="The timestamp the mission was completed with nanosecond precision",
+    )
 
 
 class MissionRepository(ABC):
@@ -124,4 +179,16 @@ class MissionRepository(ABC):
 
         Returns:
             int: The number of missions in the queue
+        """
+
+    @abstractmethod
+    async def connect_completed_mission_websocket(self, websocket: WebSocket) -> None:
+        """
+        Connect a WebSocket to receive notifications about completed missions.
+        """
+
+    @abstractmethod
+    def disconnect_completed_mission_websocket(self, websocket: WebSocket) -> None:
+        """
+        Disconnect a WebSocket from receiving notifications about completed missions.
         """

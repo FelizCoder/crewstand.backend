@@ -1,12 +1,19 @@
 from collections import deque
 from typing import Optional, Deque
 import asyncio
+from time import time_ns
 
-from app.models.missions import MissionRepository, FlowControlMission
+from app.models.missions import (
+    CompletedFlowControlMission,
+    MissionRepository,
+    FlowControlMission,
+)
 from app.models.actuators import SolenoidValve
 from app.services.actuators.solenoid import SolenoidService
 from app.services.sensors.flowmeter import FlowmeterService
 from app.utils.logger import logger
+from app.utils.websocket_manager import WebSocketManager
+from app.utils.influx_client import influx_connector
 
 
 class FlowMissionRepository(MissionRepository):
@@ -35,6 +42,7 @@ class FlowMissionRepository(MissionRepository):
         self.solenoid_service = actuator_service
         self.flowmeter_service = sensor_service
         self.flow_sensor_id = flow_sensor_id
+        self.completed_mission_ws = WebSocketManager()
 
     def add_to_queue(self, mission: FlowControlMission) -> None:
         """Add a new mission to the queue."""
@@ -53,6 +61,12 @@ class FlowMissionRepository(MissionRepository):
     def get_queue_length(self) -> int:
         """Get the current length of the mission queue."""
         return len(self.mission_queue)
+
+    async def connect_completed_mission_websocket(self, websocket):
+        await self.completed_mission_ws.connect(0, websocket)
+
+    def disconnect_completed_mission_websocket(self, websocket):
+        self.completed_mission_ws.disconnect(0, websocket)
 
     async def _execute_next_mission(self) -> None:
         """Execute the next mission in the queue."""
@@ -81,22 +95,34 @@ class FlowMissionRepository(MissionRepository):
         await self.solenoid_service.set_state(valve)
 
         # Execute each trajectory point
-        previous_time = 0
-        for point in mission.flow_trajectory:
-            # Set new flow setpoint
-            await self.flowmeter_service.post_setpoint(
-                self.flow_sensor_id, point.flow_rate
+        start_ns = time_ns()
+        try:
+            previous_time = 0
+            for point in mission.flow_trajectory:
+                # Set new flow setpoint
+                await self.flowmeter_service.post_setpoint(
+                    self.flow_sensor_id, point.flow_rate
+                )
+                # Calculate wait time from previous point
+                wait_time = point.time - previous_time
+                if wait_time > 0:
+                    await asyncio.sleep(wait_time)
+
+                previous_time = point.time
+
+            # Reset flow setpoint
+            await self.flowmeter_service.post_setpoint(self.flow_sensor_id, None)
+
+            # Close the valve
+            valve.state = False
+            await self.solenoid_service.set_state(valve)
+
+        finally:
+            end_ns = time_ns()
+            completed_mission = CompletedFlowControlMission(
+                flow_control_mission=mission, start_ns=start_ns, end_ns=end_ns
             )
-            # Calculate wait time from previous point
-            wait_time = point.time - previous_time
-            if wait_time > 0:
-                await asyncio.sleep(wait_time)
-
-            previous_time = point.time
-
-        # Reset flow setpoint
-        await self.flowmeter_service.post_setpoint(self.flow_sensor_id, None)
-
-        # Close the valve
-        valve.state = False
-        await self.solenoid_service.set_state(valve)
+            await self.completed_mission_ws.broadcast(
+                0, completed_mission.model_dump_json()
+            )
+            influx_connector.write_completed_flow_control_mission(completed_mission)

@@ -754,11 +754,25 @@
   },
   "components": {
     "schemas": {
+      "EndUseType": {
+        "type": "string",
+        "enum": [
+          "Shower",
+          "Toilet",
+          "Faucet",
+          "ClothesWasher",
+          "Dishwasher",
+          "Bathtub",
+          "other"
+        ],
+        "title": "EndUseType",
+        "description": "Enumeration of possible end use types for simulations"
+      },
       "FlowControlMission": {
         "properties": {
           "valve_id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Valve Id",
             "description": "ID of the valve to steer",
             "examples": [
@@ -785,6 +799,51 @@
                   11.1
                 ]
               ]
+            ]
+          },
+          "actual_end_use": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EndUseType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The actual end use type for simulation purposes"
+          },
+          "actual_duration": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Duration",
+            "description": "The actual duration of the simulated event in seconds",
+            "examples": [
+              3600,
+              30
+            ]
+          },
+          "actual_start_time": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Start Time",
+            "description": "The time of day when the simulated event starts (HH:MM:SS)",
+            "examples": [
+              "11:11:11",
+              "16:02:42"
             ]
           }
         },
@@ -825,7 +884,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": 0,
+            "minimum": 0.0,
             "title": "Id",
             "examples": [
               0,
@@ -877,7 +936,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -887,8 +946,8 @@
           },
           "state": {
             "type": "number",
-            "maximum": 100,
-            "minimum": 0,
+            "maximum": 100.0,
+            "minimum": 0.0,
             "title": "State"
           },
           "current_position": {
@@ -924,7 +983,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -966,14 +1025,14 @@
             "title": "Unit",
             "examples": [
               "l/min",
-              "°C",
+              "\u00b0C",
               "bar",
               "V"
             ]
           },
           "id": {
             "type": "integer",
-            "minimum": 0,
+            "minimum": 0.0,
             "title": "Id",
             "examples": [
               0,
@@ -1021,7 +1080,7 @@
             "title": "Timestamp Ns",
             "description": "Timestamp of the reading in nanoseconds since Epoch",
             "examples": [
-              1740491541298927400
+              1742222844413271900
             ]
           }
         },
@@ -1063,7 +1122,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
