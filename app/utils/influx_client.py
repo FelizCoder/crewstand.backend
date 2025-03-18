@@ -226,14 +226,14 @@ class InfluxConnector:
         """
         point = (
             Point("Flow Control Mission")
-            .field("end timestamp [ns]", mission.end_ns)
+            .field("end timestamp [s]", mission.end_ts.timestamp())
             .tag("actual end use", mission.flow_control_mission.actual_end_use)
             .tag("actual start time", mission.flow_control_mission.actual_start_time)
             .tag("actual duration", mission.flow_control_mission.actual_duration)
             .tag("valve id", mission.flow_control_mission.valve_id)
-            .time(time=mission.start_ns, write_precision=WritePrecision.NS)
+            .time(time=mission.start_ts, write_precision=WritePrecision.NS)
         )
-        logger.info(f"Writing mission to InfluxDB: {mission}")
+        logger.debug(f"Writing mission to InfluxDB: {mission}")
         self._write(point)
 
     def _write(self, point):

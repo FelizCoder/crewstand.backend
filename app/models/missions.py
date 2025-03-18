@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from datetime import time
+from datetime import datetime, time
 from enum import Enum
 from typing import NamedTuple, Optional
 from fastapi import WebSocket
@@ -128,14 +128,17 @@ class CompletedFlowControlMission(BaseModel):
         The timestamp the mission was completed with nanosecond precision.
     """
 
-    flow_control_mission: FlowControlMission
+    flow_control_mission: FlowControlMission = Field(
+        ...,
+        description="The completed FlowControlMission",
+    )
     start_ts: datetime = Field(
         ...,
-        description="The timestamp the mission started with nanosecond precision",
+        description="The timestamp the mission started",
     )
-    end_ns: int = Field(
+    end_ts: datetime = Field(
         ...,
-        description="The timestamp the mission was completed with nanosecond precision",
+        description="The timestamp the mission was completed",
     )
 
 

@@ -1080,7 +1080,7 @@
             "title": "Timestamp Ns",
             "description": "Timestamp of the reading in nanoseconds since Epoch",
             "examples": [
-              1742222844413271900
+              1742314209011322500
             ]
           }
         },
