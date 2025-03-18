@@ -1,7 +1,7 @@
 from collections import deque
+from datetime import datetime
 from typing import Optional, Deque
 import asyncio
-from time import time_ns
 
 from app.models.missions import (
     CompletedFlowControlMission,
@@ -95,7 +95,7 @@ class FlowMissionRepository(MissionRepository):
         await self.solenoid_service.set_state(valve)
 
         # Execute each trajectory point
-        start_ns = time_ns()
+        start_ts = datetime.now()
         try:
             previous_time = 0
             for point in mission.flow_trajectory:
@@ -118,9 +118,9 @@ class FlowMissionRepository(MissionRepository):
             await self.solenoid_service.set_state(valve)
 
         finally:
-            end_ns = time_ns()
+            end_ts = datetime.now()
             completed_mission = CompletedFlowControlMission(
-                flow_control_mission=mission, start_ns=start_ns, end_ns=end_ns
+                flow_control_mission=mission, start_ts=start_ts, end_ts=end_ts
             )
             await self.completed_mission_ws.broadcast(
                 0, completed_mission.model_dump_json()
