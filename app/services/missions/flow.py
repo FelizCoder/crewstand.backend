@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 from app.models.missions import FlowControlMission, MissionRepository
 from app.utils.influx_client import influx_connector
 
@@ -8,7 +8,7 @@ class FlowMissionService:
         self.mission_repo = mission_repo
         self.database = influx_connector
 
-    def add_to_queue(self, mission: FlowControlMission) -> None:
+    def add_to_queue(self, mission: List[FlowControlMission]) -> None:
         self.mission_repo.add_to_queue(mission)
 
     def get_current_mission(self) -> FlowControlMission:

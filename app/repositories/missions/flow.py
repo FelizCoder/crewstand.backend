@@ -1,6 +1,6 @@
 from collections import deque
 from datetime import datetime
-from typing import Optional, Deque
+from typing import List, Optional, Deque
 import asyncio
 
 from app.models.missions import (
@@ -44,9 +44,10 @@ class FlowMissionRepository(MissionRepository):
         self.flow_sensor_id = flow_sensor_id
         self.completed_mission_ws = WebSocketManager()
 
-    def add_to_queue(self, mission: FlowControlMission) -> None:
+    def add_to_queue(self, missions: List[FlowControlMission]) -> None:
         """Add a new mission to the queue."""
-        self.mission_queue.append(mission)
+        for mission in missions:
+            self.mission_queue.append(mission)
         if not self.current_mission:
             asyncio.create_task(self._execute_next_mission())
 
