@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "swn crew backend",
-    "version": "1.3.1"
+    "version": "1.4.0"
   },
   "paths": {
     "/v1/actuators/": {
@@ -836,7 +836,7 @@
         "properties": {
           "valve_id": {
             "type": "integer",
-            "minimum": -1.0,
+            "minimum": -1,
             "title": "Valve Id",
             "description": "ID of the valve to steer",
             "examples": [
@@ -880,7 +880,7 @@
             "anyOf": [
               {
                 "type": "integer",
-                "minimum": 1.0
+                "minimum": 1
               },
               {
                 "type": "null"
@@ -948,7 +948,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": 0.0,
+            "minimum": 0,
             "title": "Id",
             "examples": [
               0,
@@ -1000,7 +1000,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1.0,
+            "minimum": -1,
             "title": "Id",
             "examples": [
               0,
@@ -1010,8 +1010,8 @@
           },
           "state": {
             "type": "number",
-            "maximum": 100.0,
-            "minimum": 0.0,
+            "maximum": 100,
+            "minimum": 0,
             "title": "State"
           },
           "current_position": {
@@ -1047,7 +1047,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1.0,
+            "minimum": -1,
             "title": "Id",
             "examples": [
               0,
@@ -1089,14 +1089,14 @@
             "title": "Unit",
             "examples": [
               "l/min",
-              "\u00b0C",
+              "°C",
               "bar",
               "V"
             ]
           },
           "id": {
             "type": "integer",
-            "minimum": 0.0,
+            "minimum": 0,
             "title": "Id",
             "examples": [
               0,
@@ -1144,7 +1144,7 @@
             "title": "Timestamp Ns",
             "description": "Timestamp of the reading in nanoseconds since Epoch",
             "examples": [
-              1744118486530659200
+              1744118486530659300
             ]
           }
         },
@@ -1186,7 +1186,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1.0,
+            "minimum": -1,
             "title": "Id",
             "examples": [
               0,

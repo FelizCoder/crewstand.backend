@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.0](https://github.com/FelizCoder/crewstand.backend/compare/v1.3.1...v1.4.0) (2025-04-08)
+
+
+### Features
+
+* **api/missions:** Allow bulk mission queuing for FlowControlMission ([fd2db49](https://github.com/FelizCoder/crewstand.backend/commit/fd2db49de17d2da94ec6312cfda8f25214229b4f)), closes [#89](https://github.com/FelizCoder/crewstand.backend/issues/89)
+* **missions:** add automatic mission wait time configuration ([c755082](https://github.com/FelizCoder/crewstand.backend/commit/c755082ba4b18820dfe94b7d194e1010c532fd7c)), closes [#89](https://github.com/FelizCoder/crewstand.backend/issues/89)
+* **missions:** Enhance Mission Management & InfluxDB Logging ([8bb9aeb](https://github.com/FelizCoder/crewstand.backend/commit/8bb9aeb829b1f2b1a7fd9faf50f0e0cce39d8346)), closes [#84](https://github.com/FelizCoder/crewstand.backend/issues/84)
+* **missions:** implement mission execution management ([e27ca8d](https://github.com/FelizCoder/crewstand.backend/commit/e27ca8d7199ce1cfb724ab769a97d861f5cd1be6)), closes [#81](https://github.com/FelizCoder/crewstand.backend/issues/81)
+* start uvicorn on init main ([6f0afb9](https://github.com/FelizCoder/crewstand.backend/commit/6f0afb93b28b22d9465c5bb69153e344ee4e59db))
+
 ## [1.3.1](https://github.com/FelizCoder/crewstand.backend/compare/v1.3.0...v1.3.1) (2025-02-26)
 
 
