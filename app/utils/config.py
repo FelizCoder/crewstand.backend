@@ -24,6 +24,7 @@ class Config(BaseSettings):
     INFLUXDB_TOKEN: str
     INFLUXDB_URL: HttpUrl
     GPIOZERO_PIN_FACTORY: Union[str, None] = None
+    MISSION_WAIT_SECONDS: int = 10
     PROJECT_NAME: str = "swncrew backend"
     PROPORTIONAL_CAN_INTERFACE: str = "can0"
     PROPORTIONAL_GPIO: Union[str, None] = None

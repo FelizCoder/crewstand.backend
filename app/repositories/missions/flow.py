@@ -11,6 +11,7 @@ from app.models.missions import (
 from app.models.actuators import SolenoidValve
 from app.services.actuators.solenoid import SolenoidService
 from app.services.sensors.flowmeter import FlowmeterService
+from app.utils.config import settings
 from app.utils.logger import logger
 from app.utils.websocket_manager import WebSocketManager
 from app.utils.influx_client import influx_connector
@@ -82,6 +83,11 @@ class FlowMissionRepository(MissionRepository):
         finally:
             self.current_mission = None
             if self.mission_queue:
+                # Wait as defined in settings before starting the next mission
+                logger.debug(
+                    "Wait for %d s to start next mission", settings.MISSION_WAIT_SECONDS
+                )
+                await asyncio.sleep(settings.MISSION_WAIT_SECONDS)
                 await self._execute_next_mission()
 
     async def _execute_mission(self, mission: FlowControlMission) -> None:
@@ -91,6 +97,7 @@ class FlowMissionRepository(MissionRepository):
         Args:
             mission: The mission to execute
         """
+        logger.debug("Executing mission: %s", mission.model_dump_json(indent=2))
         # Open the valve
         valve = SolenoidValve(id=mission.valve_id, state=True)
         await self.solenoid_service.set_state(valve)
