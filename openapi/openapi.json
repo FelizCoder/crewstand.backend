@@ -812,21 +812,21 @@
             ],
             "description": "The actual end use type for simulation purposes"
           },
-          "actual_duration": {
+          "duration_scaling_factor": {
             "anyOf": [
               {
-                "type": "number",
-                "minimum": 0.0
+                "type": "integer",
+                "minimum": 1.0
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Actual Duration",
-            "description": "The actual duration of the simulated event in seconds",
+            "title": "Duration Scaling Factor",
+            "description": "The scaling factor of the event simulation. e.g. A simulation with a factor = 2 and a duration of 45 s represents an original event of 90 s",
             "examples": [
-              3600,
-              30
+              2,
+              1
             ]
           },
           "actual_start_time": {
@@ -853,7 +853,7 @@
           "flow_trajectory"
         ],
         "title": "FlowControlMission",
-        "description": "A class representing a flow control mission for a specific valve.\n\nThis class defines a mission that controls the flow rate of a specified valve over time\nby following a predefined trajectory of time and flow rate points.\n\nParameters\n----------\nvalve_id : int\n    The ID of the valve to control.\nflow_trajectory : list of TrajectoryPoint\n    A list of TrajectoryPoint instances, each specifying a time and the desired flow rate\n    until that time is reached.\n\nRaises\n------\nValueError\n    If the flow trajectory is empty, contains negative time or flow rate values,\n    or if the time values are not in strictly ascending order.\n\nExamples\n--------\n>>> from app.models.missions import FlowControlMission, TrajectoryPoint\n>>> mission = FlowControlMission(\n...     valve_id=1,\n...     flow_trajectory=[\n...         TrajectoryPoint(time=10, flow_rate=22.2),\n...         TrajectoryPoint(time=20, flow_rate=11.1)\n...     ]\n... )\n>>> print(mission.valve_id)\n1"
+        "description": "    A class representing a flow control mission for a specific valve.\n\n    This class defines a mission that controls the flow rate of a specified valve over time\n    by following a predefined trajectory of time and flow rate points.\n\n    Parameters\n    ----------\n    valve_id : int\n        The ID of the valve to control.\n    flow_trajectory : list of TrajectoryPoint\n        A list of TrajectoryPoint instances, each specifying a time and the desired flow rate\n        until that time is reached.\n\n    duration_scaling_factor : Optional[int]\n        The scaling factor of the event simulation. For example, a simulation with a factor of 2 and a duration of 45 s represents an original event of 90 s. This parameter helps to simulate events with different durations without changing the original trajectory.\n\n    actual_end_use : Optional[EndUseType]\n        The actual end use type for simulation purposes.\n\n    actual_start_time : Optional[time]\n        The time of day when the simulated event starts (HH:MM:SS).\n\n    Raises\n    ------\n    ValueError\n        If the flow trajectory is empty, contains negative time or flow rate values,\n        or if the time values are not in strictly ascending order.\n\n    Examples\n    --------\n    >>> from app.models.missions import FlowControlMission, TrajectoryPoint\n    >>> mission = FlowControlMission(\n...     valve_id=1,\n...     flow_trajectory=[\n...         TrajectoryPoint(time=10, flow_rate=22.2),\n...         TrajectoryPoint(time=20, flow_rate=11.1)\n...     ],\n...     duration_scaling_factor=2,  # The demo mission has a scaling factor of 2.\n...     actual_end_use=EndUseType.SHOWER,\n...     actual_start_time=time(11, 11, 11)\n... )\n    >>> print(mission.valve_id)\n    1"
       },
       "Flowmeter": {
         "properties": {
@@ -1080,7 +1080,7 @@
             "title": "Timestamp Ns",
             "description": "Timestamp of the reading in nanoseconds since Epoch",
             "examples": [
-              1742314209011322500
+              1744100790356505600
             ]
           }
         },
