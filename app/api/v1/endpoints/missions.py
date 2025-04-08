@@ -1,5 +1,5 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from typing import Optional
+from typing import List, Optional
 from app.models.missions import FlowControlMission
 from app.services.missions.flow import FlowMissionService
 
@@ -15,11 +15,11 @@ class FlowMissionRouter(APIRouter):
         self._setup_routes()
 
     def _setup_routes(self):
-        @self.post("/queue", response_model=FlowControlMission)
-        async def add_to_queue(mission: FlowControlMission):
+        @self.post("/queue")
+        async def add_to_queue(mission: List[FlowControlMission]):
             """Add a new mission to the queue."""
             self.service.add_to_queue(mission)
-            return mission
+            return True
 
         @self.get("/current", response_model=Optional[FlowControlMission])
         async def get_current():

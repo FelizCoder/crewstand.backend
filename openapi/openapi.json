@@ -621,7 +621,11 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FlowControlMission"
+                "items": {
+                  "$ref": "#/components/schemas/FlowControlMission"
+                },
+                "type": "array",
+                "title": "Mission"
               }
             }
           },
@@ -632,9 +636,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FlowControlMission"
-                }
+                "schema": {}
               }
             }
           },
@@ -1080,7 +1082,7 @@
             "title": "Timestamp Ns",
             "description": "Timestamp of the reading in nanoseconds since Epoch",
             "examples": [
-              1744100790356505600
+              1744101568011920600
             ]
           }
         },

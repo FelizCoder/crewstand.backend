@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime, time
 from enum import Enum
-from typing import NamedTuple, Optional
+from typing import List, NamedTuple, Optional
 from fastapi import WebSocket
 from pydantic import BaseModel, Field, field_validator
 
@@ -162,7 +162,7 @@ class MissionRepository(ABC):
     """
 
     @abstractmethod
-    def add_to_queue(self, mission: FlowControlMission) -> None:
+    def add_to_queue(self, missions: List[FlowControlMission]) -> None:
         """
         Add a mission to the queue.
 
