@@ -39,7 +39,7 @@ settings = Config()
 
 logger.setLevel(settings.DEBUG_LEVEL.upper())
 
-logger.debug(
+logger.info(
     "Start project with current configuration \n %s", settings.model_dump_json(indent=2)
 )
 
