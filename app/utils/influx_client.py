@@ -229,7 +229,10 @@ class InfluxConnector:
             .field("end timestamp [s]", mission.end_ts.timestamp())
             .tag("actual end use", mission.flow_control_mission.actual_end_use)
             .tag("actual start time", mission.flow_control_mission.actual_start_time)
-            .tag("actual duration", mission.flow_control_mission.actual_duration)
+            .tag(
+                "duration scaling factor",
+                mission.flow_control_mission.duration_scaling_factor,
+            )
             .tag("valve id", mission.flow_control_mission.valve_id)
             .time(time=mission.start_ts, write_precision=WritePrecision.NS)
         )

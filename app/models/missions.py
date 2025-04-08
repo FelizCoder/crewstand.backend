@@ -32,37 +32,50 @@ class EndUseType(str, Enum):
 
 class FlowControlMission(BaseModel):
     """
-    A class representing a flow control mission for a specific valve.
+        A class representing a flow control mission for a specific valve.
 
-    This class defines a mission that controls the flow rate of a specified valve over time
-    by following a predefined trajectory of time and flow rate points.
+        This class defines a mission that controls the flow rate of a specified valve over time
+        by following a predefined trajectory of time and flow rate points.
 
-    Parameters
-    ----------
-    valve_id : int
-        The ID of the valve to control.
-    flow_trajectory : list of TrajectoryPoint
-        A list of TrajectoryPoint instances, each specifying a time and the desired flow rate
-        until that time is reached.
+        Parameters
+        ----------
+        valve_id : int
+            The ID of the valve to control.
+        flow_trajectory : list of TrajectoryPoint
+            A list of TrajectoryPoint instances, each specifying a time and the desired flow rate
+            until that time is reached.
 
-    Raises
-    ------
-    ValueError
-        If the flow trajectory is empty, contains negative time or flow rate values,
-        or if the time values are not in strictly ascending order.
+        duration_scaling_factor : Optional[int]
+            The scaling factor of the event simulation. For example, a simulation with a factor of 2 and a duration of 45 s represents an original event of 90 s. This parameter helps to simulate events with different durations without changing the original trajectory.
 
-    Examples
-    --------
-    >>> from app.models.missions import FlowControlMission, TrajectoryPoint
-    >>> mission = FlowControlMission(
+        actual_end_use : Optional[EndUseType]
+            The actual end use type for simulation purposes.
+
+        actual_start_time : Optional[time]
+            The time of day when the simulated event starts (HH:MM:SS).
+
+        Raises
+        ------
+        ValueError
+            If the flow trajectory is empty, contains negative time or flow rate values,
+            or if the time values are not in strictly ascending order.
+
+        Examples
+        --------
+        >>> from app.models.missions import FlowControlMission, TrajectoryPoint
+        >>> mission = FlowControlMission(
     ...     valve_id=1,
     ...     flow_trajectory=[
     ...         TrajectoryPoint(time=10, flow_rate=22.2),
     ...         TrajectoryPoint(time=20, flow_rate=11.1)
-    ...     ]
+    ...     ],
+    ...     duration_scaling_factor=2,  # The demo mission has a scaling factor of 2.
+    ...     actual_end_use=EndUseType.SHOWER,
+    ...     actual_start_time=time(11, 11, 11)
     ... )
-    >>> print(mission.valve_id)
-    1
+        >>> print(mission.valve_id)
+        1
+
     """
 
     valve_id: int = Field(
@@ -77,11 +90,11 @@ class FlowControlMission(BaseModel):
     actual_end_use: Optional[EndUseType] = Field(
         None, description="The actual end use type for simulation purposes"
     )
-    actual_duration: Optional[float] = Field(
+    duration_scaling_factor: Optional[int] = Field(
         None,
-        description="The actual duration of the simulated event in seconds",
-        ge=0,
-        examples=[3600, 30],
+        description="The scaling factor of the event simulation. e.g. A simulation with a factor = 2 and a duration of 45 s represents an original event of 90 s",
+        ge=1,
+        examples=[2, 1],
     )
     actual_start_time: Optional[time] = Field(
         None,
