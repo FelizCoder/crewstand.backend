@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.openapi.docs import get_swagger_ui_html
+import uvicorn
 from .api.v1.router import v1_router
 from .utils.config import settings
 
@@ -68,3 +69,7 @@ async def generate_openapi():
     """
     openapi = app.openapi()
     openapi_output_path.write_text(json.dumps(openapi, indent=2), encoding="utf-8")
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
