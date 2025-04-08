@@ -37,6 +37,7 @@ class FlowMissionRepository(MissionRepository):
             sensor_service: Service to control flow sensors
             flow_sensor_id: ID of the flow sensor to control
         """
+        self.active = True
         self.mission_queue: Deque[FlowControlMission] = deque()
         self.current_mission: Optional[FlowControlMission] = None
         self.mission_task: Optional[asyncio.Task] = None
@@ -48,9 +49,11 @@ class FlowMissionRepository(MissionRepository):
     def add_to_queue(self, missions: List[FlowControlMission]) -> None:
         """Add a new mission to the queue."""
         for mission in missions:
+            logger.debug(f"Adding mission to queue")
             self.mission_queue.append(mission)
-        if not self.current_mission:
-            asyncio.create_task(self._execute_next_mission())
+        if self.mission_task is None:
+            logger.debug(f"Starting to execute mission queue")
+            self.mission_task = asyncio.create_task(self._execute_next_mission())
 
     def get_current_mission(self) -> Optional[FlowControlMission]:
         """Get the currently executing mission."""
@@ -64,6 +67,21 @@ class FlowMissionRepository(MissionRepository):
         """Get the current length of the mission queue."""
         return len(self.mission_queue)
 
+    def get_active(self):
+        return self.active
+
+    def set_active(self, active):
+        logger.debug(f"Setting Mission Repo active to {active}")
+        self.active = active
+
+        if not active and self.mission_task:
+            self.mission_task.cancel()
+        elif active and self.mission_task is None:  # Only if no task is running
+            logger.debug("Starting new mission task")
+            self.mission_task = asyncio.create_task(self._execute_next_mission())
+
+        return self.active
+
     async def connect_completed_mission_websocket(self, websocket):
         await self.completed_mission_ws.connect(0, websocket)
 
@@ -71,24 +89,24 @@ class FlowMissionRepository(MissionRepository):
         self.completed_mission_ws.disconnect(0, websocket)
 
     async def _execute_next_mission(self) -> None:
-        """Execute the next mission in the queue."""
-        if not self.mission_queue:
-            return
-
-        self.current_mission = self.mission_queue.popleft()
-        try:
-            await self._execute_mission(self.current_mission)
-        except Exception as e:
-            logger.error(f"Error executing mission: {e}")
-        finally:
+        if not self.active or not self.mission_queue:
             self.current_mission = None
-            if self.mission_queue:
-                # Wait as defined in settings before starting the next mission
-                logger.debug(
-                    "Wait for %d s to start next mission", settings.MISSION_WAIT_SECONDS
-                )
+            self.mission_task = None
+            return
+        try:
+            while self.mission_queue and self.active:
+                self.current_mission = self.mission_queue.popleft()
+                await self._execute_mission(self.current_mission)
                 await asyncio.sleep(settings.MISSION_WAIT_SECONDS)
-                await self._execute_next_mission()
+        except asyncio.CancelledError:
+            logger.info("Mission task cancelled")
+            self.current_mission = None
+        except Exception as e:
+            logger.error("Error executing mission: %s", e)
+            self.current_mission = None
+        finally:
+            self.mission_task = None
+            self.current_mission = None
 
     async def _execute_mission(self, mission: FlowControlMission) -> None:
         """
@@ -125,6 +143,13 @@ class FlowMissionRepository(MissionRepository):
             valve.state = False
             await self.solenoid_service.set_state(valve)
 
+        except asyncio.CancelledError:
+            logger.info("Current mission cancelled")
+            # Optionally, reset or clean up
+            await self.flowmeter_service.post_setpoint(self.flow_sensor_id, None)
+            valve.state = False
+            await self.solenoid_service.set_state(valve)
+
         finally:
             end_ts = datetime.now()
             completed_mission = CompletedFlowControlMission(
@@ -134,3 +159,4 @@ class FlowMissionRepository(MissionRepository):
                 0, completed_mission.model_dump_json()
             )
             influx_connector.write_completed_flow_control_mission(completed_mission)
+            self.current_mission = None

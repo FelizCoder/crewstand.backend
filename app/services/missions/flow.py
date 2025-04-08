@@ -19,3 +19,9 @@ class FlowMissionService:
 
     def get_queue_length(self) -> int:
         return self.mission_repo.get_queue_length()
+
+    def get_active(self) -> bool:
+        return self.mission_repo.get_active()
+
+    def set_active(self, active: bool) -> bool:
+        return self.mission_repo.set_active(active)
