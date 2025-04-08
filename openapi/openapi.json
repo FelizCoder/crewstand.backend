@@ -736,6 +736,68 @@
         }
       }
     },
+    "/v1/missions/flow/active": {
+      "get": {
+        "tags": [
+          "Flow Missions"
+        ],
+        "summary": "Get Active",
+        "description": "Get Mission execution status.",
+        "operationId": "get_active_v1_missions_flow_active_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean",
+                  "title": "Response Get Active V1 Missions Flow Active Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Flow Missions"
+        ],
+        "summary": "Set Active",
+        "description": "Set Mission execution to active.",
+        "operationId": "set_active_v1_missions_flow_active_post",
+        "parameters": [
+          {
+            "name": "active",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean",
+              "title": "Active"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "summary": "Root",
@@ -1082,7 +1144,7 @@
             "title": "Timestamp Ns",
             "description": "Timestamp of the reading in nanoseconds since Epoch",
             "examples": [
-              1744101568011920600
+              1744118486530659200
             ]
           }
         },

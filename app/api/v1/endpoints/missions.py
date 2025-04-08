@@ -36,6 +36,16 @@ class FlowMissionRouter(APIRouter):
             """Get the current length of the mission queue."""
             return self.service.get_queue_length()
 
+        @self.get("/active")
+        async def get_active() -> bool:
+            """Get Mission execution status."""
+            return self.service.get_active()
+
+        @self.post("/active")
+        async def set_active(active: bool):
+            """Set Mission execution to active."""
+            self.service.set_active(active)
+
         @self.websocket("/completed")
         async def completed_missions_ws(websocket: WebSocket):
             await self.service.mission_repo.connect_completed_mission_websocket(

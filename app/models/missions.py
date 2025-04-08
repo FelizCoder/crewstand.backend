@@ -198,6 +198,21 @@ class MissionRepository(ABC):
         """
 
     @abstractmethod
+    def get_active(self) -> bool:
+        """
+        Get the active state of the mission repository.
+        """
+
+    @abstractmethod
+    def set_active(self, active: bool) -> bool:
+        """
+        Set the active state of the mission repository.
+        As long as active the repository will execute missions in the queue.
+        If inactive the repository will not execute missions.
+
+        """
+
+    @abstractmethod
     async def connect_completed_mission_websocket(self, websocket: WebSocket) -> None:
         """
         Connect a WebSocket to receive notifications about completed missions.
