@@ -227,7 +227,7 @@ class InfluxConnector:
         point = (
             Point("Flow Control Mission")
             .field("end timestamp [s]", mission.end_ts.timestamp())
-            .tag("actual end use", mission.flow_control_mission.actual_end_use)
+            .tag("actual end use", mission.flow_control_mission.actual_end_use.value)
             .tag("actual start time", mission.flow_control_mission.actual_start_time)
             .tag(
                 "duration scaling factor",
