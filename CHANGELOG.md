@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/FelizCoder/crewstand.backend/compare/v1.4.0...v1.4.1) (2025-04-09)
+
+
+### Bug Fixes
+
+* **mission:** Log string value on influxdb ([2dd369f](https://github.com/FelizCoder/crewstand.backend/commit/2dd369fd04d97e75dbebba0a8c03c62182bef63a))
+
 ## [1.4.0](https://github.com/FelizCoder/crewstand.backend/compare/v1.3.1...v1.4.0) (2025-04-08)
 
 
