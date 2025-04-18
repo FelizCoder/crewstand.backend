@@ -1,6 +1,9 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from typing import List, Optional
-from app.models.missions import FlowControlMission
+from app.models.missions import (
+    ClassifiedFlowControlMission,
+    FlowControlMission,
+)
 from app.services.missions.flow import FlowMissionService
 
 router = APIRouter(tags=["Missions"])
@@ -31,6 +34,16 @@ class FlowMissionRouter(APIRouter):
             """Get the next mission in the queue."""
             return self.service.get_next_mission()
 
+        @self.get("/last", response_model=Optional[ClassifiedFlowControlMission])
+        async def get_last():
+            """Get the last completed mission."""
+            return self.service.get_last_mission()
+
+        @self.post("/last")
+        async def post_last(mission: ClassifiedFlowControlMission):
+            await self.service.post_last_mission(mission)
+            return True
+
         @self.get("/queue/length")
         async def get_queue_length() -> int:
             """Get the current length of the mission queue."""
@@ -57,5 +70,18 @@ class FlowMissionRouter(APIRouter):
                     await websocket.receive_text()
             except WebSocketDisconnect:
                 await self.service.mission_repo.disconnect_completed_mission_websocket(
+                    websocket
+                )
+
+        @self.websocket("/classified")
+        async def classified_missions_ws(websocket: WebSocket):
+            await self.service.mission_repo.connect_classified_mission_websocket(
+                websocket
+            )
+            try:
+                while True:
+                    await websocket.receive_text()
+            except WebSocketDisconnect:
+                await self.service.mission_repo.disconnect_classified_mission_websocket(
                     websocket
                 )

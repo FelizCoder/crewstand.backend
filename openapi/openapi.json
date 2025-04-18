@@ -713,6 +713,73 @@
         }
       }
     },
+    "/v1/missions/flow/last": {
+      "get": {
+        "tags": [
+          "Flow Missions"
+        ],
+        "summary": "Get Last",
+        "description": "Get the last completed mission.",
+        "operationId": "get_last_v1_missions_flow_last_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ClassifiedFlowControlMission-Output"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Get Last V1 Missions Flow Last Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Flow Missions"
+        ],
+        "summary": "Post Last",
+        "operationId": "post_last_v1_missions_flow_last_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassifiedFlowControlMission-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/missions/flow/queue/length": {
       "get": {
         "tags": [
@@ -818,6 +885,78 @@
   },
   "components": {
     "schemas": {
+      "ClassifiedFlowControlMission-Input": {
+        "properties": {
+          "flow_control_mission": {
+            "$ref": "#/components/schemas/FlowControlMission",
+            "description": "The completed FlowControlMission"
+          },
+          "start_ts": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Ts",
+            "description": "The timestamp the mission started"
+          },
+          "end_ts": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End Ts",
+            "description": "The timestamp the mission was completed"
+          },
+          "features": {
+            "$ref": "#/components/schemas/FlowClassifierFeatures"
+          },
+          "predicted_end_use": {
+            "$ref": "#/components/schemas/EndUseType"
+          }
+        },
+        "type": "object",
+        "required": [
+          "flow_control_mission",
+          "start_ts",
+          "end_ts",
+          "features",
+          "predicted_end_use"
+        ],
+        "title": "ClassifiedFlowControlMission",
+        "description": "Represents a flow control mission which has been classified based on its features.\n\nParameters\n----------\nfeatures : FlowClassifierFeatures\n    An instance of `FlowClassifierFeatures` used for classifying the mission.\npredicted_end_use : EndUseType\n    The predicted end use for this mission as determined by the classifier.\n\nAttributes\n----------\nfeatures : FlowClassifierFeatures\n    Features of the mission used for classification.\npredicted_end_use : EndUseType\n    The end use category that the mission's features suggest it matches.\n\nMethods\n-------\nNone defined specifically for this subclass. It relies on the methods implemented in the superclass.\n\nRaises\n------\nValueError\n    If the provided `predicted_end_use` is not a valid instance of `EndUseType`.\nTypeError\n    If the provided `features` is not an instance of `FlowClassifierFeatures`.\n\nNotes\n-----\nThis class extends `CompletedFlowControlMission` and is intended to handle missions that have been completed\nand classified according to their flow characteristics and other features. The classification algorithm\ntypically utilizes Machine Learning models to predict the `end_use` based on the provided `features`."
+      },
+      "ClassifiedFlowControlMission-Output": {
+        "properties": {
+          "flow_control_mission": {
+            "$ref": "#/components/schemas/FlowControlMission",
+            "description": "The completed FlowControlMission"
+          },
+          "start_ts": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Ts",
+            "description": "The timestamp the mission started"
+          },
+          "end_ts": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End Ts",
+            "description": "The timestamp the mission was completed"
+          },
+          "features": {
+            "$ref": "#/components/schemas/FlowClassifierFeatures"
+          },
+          "predicted_end_use": {
+            "$ref": "#/components/schemas/EndUseType"
+          }
+        },
+        "type": "object",
+        "required": [
+          "flow_control_mission",
+          "start_ts",
+          "end_ts",
+          "features",
+          "predicted_end_use"
+        ],
+        "title": "ClassifiedFlowControlMission",
+        "description": "Represents a flow control mission which has been classified based on its features.\n\nParameters\n----------\nfeatures : FlowClassifierFeatures\n    An instance of `FlowClassifierFeatures` used for classifying the mission.\npredicted_end_use : EndUseType\n    The predicted end use for this mission as determined by the classifier.\n\nAttributes\n----------\nfeatures : FlowClassifierFeatures\n    Features of the mission used for classification.\npredicted_end_use : EndUseType\n    The end use category that the mission's features suggest it matches.\n\nMethods\n-------\nNone defined specifically for this subclass. It relies on the methods implemented in the superclass.\n\nRaises\n------\nValueError\n    If the provided `predicted_end_use` is not a valid instance of `EndUseType`.\nTypeError\n    If the provided `features` is not an instance of `FlowClassifierFeatures`.\n\nNotes\n-----\nThis class extends `CompletedFlowControlMission` and is intended to handle missions that have been completed\nand classified according to their flow characteristics and other features. The classification algorithm\ntypically utilizes Machine Learning models to predict the `end_use` based on the provided `features`."
+      },
       "EndUseType": {
         "type": "string",
         "enum": [
@@ -832,11 +971,50 @@
         "title": "EndUseType",
         "description": "Enumeration of possible end use types for simulations"
       },
+      "FlowClassifierFeatures": {
+        "properties": {
+          "Volume": {
+            "type": "number",
+            "title": "Volume",
+            "description": "Total volume of water consumed in liters"
+          },
+          "Mean": {
+            "type": "number",
+            "title": "Mean",
+            "description": "Mean flow rate in liters per minute"
+          },
+          "Peak": {
+            "type": "number",
+            "title": "Peak",
+            "description": "Peak flow rate in liters per minute"
+          },
+          "Duration": {
+            "type": "number",
+            "title": "Duration",
+            "description": "Duration of the flow in seconds"
+          },
+          "Hour": {
+            "type": "number",
+            "title": "Hour",
+            "description": "Hour of the day [0,24["
+          }
+        },
+        "type": "object",
+        "required": [
+          "Volume",
+          "Mean",
+          "Peak",
+          "Duration",
+          "Hour"
+        ],
+        "title": "FlowClassifierFeatures",
+        "description": "A Pydantic BaseModel class representing features used to classify flow control missions.\n\nParameters\n----------\nVolume : float\n    Total volume of water consumed in liters during the mission.\nMean : float\n    Mean flow rate in liters per minute during the mission.\nPeak : float\n    Peak flow rate in liters per minute observed during the mission.\nDuration : float\n    Duration of the flow in seconds.\nHour : float\n    The hour of the day [0, 24[ when the mission was initiated, representing the start time in terms of\n    a 24-hour clock format, useful for temporal pattern analysis.\n\nRaises\n------\nValueError\n    If the values of any parameter do not conform to their expected data types and constraints.\n\nNotes\n-----\nThis class is intended to serve as a structured data container for feeding into a machine learning model\nthat predicts flow control mission end use based on extracted features. The `Hour` feature additionally\nsupports time-of-day factors which might affect some classifications like residential water usage patterns.\n\nThe fields have been annotated with descriptions for improved documentation and validation."
+      },
       "FlowControlMission": {
         "properties": {
           "valve_id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Valve Id",
             "description": "ID of the valve to steer",
             "examples": [
@@ -880,7 +1058,7 @@
             "anyOf": [
               {
                 "type": "integer",
-                "minimum": 1
+                "minimum": 1.0
               },
               {
                 "type": "null"
@@ -948,7 +1126,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": 0,
+            "minimum": 0.0,
             "title": "Id",
             "examples": [
               0,
@@ -1000,7 +1178,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -1010,8 +1188,8 @@
           },
           "state": {
             "type": "number",
-            "maximum": 100,
-            "minimum": 0,
+            "maximum": 100.0,
+            "minimum": 0.0,
             "title": "State"
           },
           "current_position": {
@@ -1047,7 +1225,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,
@@ -1089,14 +1267,14 @@
             "title": "Unit",
             "examples": [
               "l/min",
-              "°C",
+              "\u00b0C",
               "bar",
               "V"
             ]
           },
           "id": {
             "type": "integer",
-            "minimum": 0,
+            "minimum": 0.0,
             "title": "Id",
             "examples": [
               0,
@@ -1144,7 +1322,7 @@
             "title": "Timestamp Ns",
             "description": "Timestamp of the reading in nanoseconds since Epoch",
             "examples": [
-              1744118486530659300
+              1744979954492247000
             ]
           }
         },
@@ -1186,7 +1364,7 @@
           },
           "id": {
             "type": "integer",
-            "minimum": -1,
+            "minimum": -1.0,
             "title": "Id",
             "examples": [
               0,

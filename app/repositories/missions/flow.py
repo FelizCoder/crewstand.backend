@@ -4,6 +4,7 @@ from typing import List, Optional, Deque
 import asyncio
 
 from app.models.missions import (
+    ClassifiedFlowControlMission,
     CompletedFlowControlMission,
     MissionRepository,
     FlowControlMission,
@@ -44,27 +45,32 @@ class FlowMissionRepository(MissionRepository):
         self.solenoid_service = actuator_service
         self.flowmeter_service = sensor_service
         self.flow_sensor_id = flow_sensor_id
+        self.last_mission: Optional[ClassifiedFlowControlMission] = None
         self.completed_mission_ws = WebSocketManager()
+        self.classified_mission_ws = WebSocketManager()
 
     def add_to_queue(self, missions: List[FlowControlMission]) -> None:
-        """Add a new mission to the queue."""
         for mission in missions:
-            logger.debug(f"Adding mission to queue")
+            logger.debug("Adding mission to queue")
             self.mission_queue.append(mission)
         if self.mission_task is None:
-            logger.debug(f"Starting to execute mission queue")
+            logger.debug("Starting to execute mission queue")
             self.mission_task = asyncio.create_task(self._execute_next_mission())
 
     def get_current_mission(self) -> Optional[FlowControlMission]:
-        """Get the currently executing mission."""
         return self.current_mission
 
     def get_next_mission(self) -> Optional[FlowControlMission]:
-        """Get the next mission in the queue without removing it."""
         return self.mission_queue[0] if self.mission_queue else None
 
+    def get_last_mission(self) -> Optional[ClassifiedFlowControlMission]:
+        return self.last_mission
+
+    async def post_last_mission(self, mission):
+        self.last_mission = mission
+        await self.classified_mission_ws.broadcast(0, mission.model_dump_json())
+
     def get_queue_length(self) -> int:
-        """Get the current length of the mission queue."""
         return len(self.mission_queue)
 
     def get_active(self):
@@ -87,6 +93,12 @@ class FlowMissionRepository(MissionRepository):
 
     def disconnect_completed_mission_websocket(self, websocket):
         self.completed_mission_ws.disconnect(0, websocket)
+
+    async def connect_classified_mission_websocket(self, websocket):
+        await self.classified_mission_ws.connect(0, websocket)
+
+    def disconnect_classified_mission_websocket(self, websocket):
+        self.classified_mission_ws.disconnect(0, websocket)
 
     async def _execute_next_mission(self) -> None:
         if not self.active or not self.mission_queue:
@@ -152,11 +164,11 @@ class FlowMissionRepository(MissionRepository):
 
         finally:
             end_ts = datetime.now()
-            completed_mission = CompletedFlowControlMission(
+            self.last_mission = CompletedFlowControlMission(
                 flow_control_mission=mission, start_ts=start_ts, end_ts=end_ts
             )
             await self.completed_mission_ws.broadcast(
-                0, completed_mission.model_dump_json()
+                0, self.last_mission.model_dump_json()
             )
-            influx_connector.write_completed_flow_control_mission(completed_mission)
+            influx_connector.write_completed_flow_control_mission(self.last_mission)
             self.current_mission = None
