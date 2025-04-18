@@ -30,6 +30,45 @@ class EndUseType(str, Enum):
     OTHER = "other"
 
 
+class FlowClassifierFeatures(BaseModel):
+    """
+    A Pydantic BaseModel class representing features used to classify flow control missions.
+
+    Parameters
+    ----------
+    Volume : float
+        Total volume of water consumed in liters during the mission.
+    Mean : float
+        Mean flow rate in liters per minute during the mission.
+    Peak : float
+        Peak flow rate in liters per minute observed during the mission.
+    Duration : float
+        Duration of the flow in seconds.
+    Hour : float
+        The hour of the day [0, 24[ when the mission was initiated, representing the start time in terms of
+        a 24-hour clock format, useful for temporal pattern analysis.
+
+    Raises
+    ------
+    ValueError
+        If the values of any parameter do not conform to their expected data types and constraints.
+
+    Notes
+    -----
+    This class is intended to serve as a structured data container for feeding into a machine learning model
+    that predicts flow control mission end use based on extracted features. The `Hour` feature additionally
+    supports time-of-day factors which might affect some classifications like residential water usage patterns.
+
+    The fields have been annotated with descriptions for improved documentation and validation.
+    """
+
+    Volume: float = Field(..., description="Total volume of water consumed in liters")
+    Mean: float = Field(..., description="Mean flow rate in liters per minute")
+    Peak: float = Field(..., description="Peak flow rate in liters per minute")
+    Duration: float = Field(..., description="Duration of the flow in seconds")
+    Hour: float = Field(..., description="Hour of the day [0,24[")
+
+
 class FlowControlMission(BaseModel):
     """
         A class representing a flow control mission for a specific valve.
@@ -155,6 +194,46 @@ class CompletedFlowControlMission(BaseModel):
     )
 
 
+class ClassifiedFlowControlMission(CompletedFlowControlMission):
+    """
+    Represents a flow control mission which has been classified based on its features.
+
+    Parameters
+    ----------
+    features : FlowClassifierFeatures
+        An instance of `FlowClassifierFeatures` used for classifying the mission.
+    predicted_end_use : EndUseType
+        The predicted end use for this mission as determined by the classifier.
+
+    Attributes
+    ----------
+    features : FlowClassifierFeatures
+        Features of the mission used for classification.
+    predicted_end_use : EndUseType
+        The end use category that the mission's features suggest it matches.
+
+    Methods
+    -------
+    None defined specifically for this subclass. It relies on the methods implemented in the superclass.
+
+    Raises
+    ------
+    ValueError
+        If the provided `predicted_end_use` is not a valid instance of `EndUseType`.
+    TypeError
+        If the provided `features` is not an instance of `FlowClassifierFeatures`.
+
+    Notes
+    -----
+    This class extends `CompletedFlowControlMission` and is intended to handle missions that have been completed
+    and classified according to their flow characteristics and other features. The classification algorithm
+    typically utilizes Machine Learning models to predict the `end_use` based on the provided `features`.
+    """
+
+    features: FlowClassifierFeatures
+    predicted_end_use: EndUseType
+
+
 class MissionRepository(ABC):
     """
     Abstract base class for mission repository implementations.
@@ -186,6 +265,27 @@ class MissionRepository(ABC):
 
         Returns:
             Optional[FlowControlMission]: The next mission if available, None otherwise
+        """
+
+    @abstractmethod
+    def get_last_mission(self) -> Optional[ClassifiedFlowControlMission]:
+        """
+        Retrieve the last completed mission.
+
+        Returns:
+            Optional[CompletedFlowControlMission]: The last completed mission if available, None otherwise
+        """
+
+    @abstractmethod
+    async def post_last_mission(self, mission: ClassifiedFlowControlMission) -> None:
+        """
+        Posts or records the provided `ClassifiedFlowControlMission` as the latest mission.
+
+        Parameters:
+        -----------
+        mission : ClassifiedFlowControlMission
+            The `ClassifiedFlowControlMission` object that represents the mission to be recorded as the latest one.
+            Ensure that this mission is indeed a completed mission that has been already classified.
         """
 
     @abstractmethod
@@ -222,4 +322,16 @@ class MissionRepository(ABC):
     def disconnect_completed_mission_websocket(self, websocket: WebSocket) -> None:
         """
         Disconnect a WebSocket from receiving notifications about completed missions.
+        """
+
+    @abstractmethod
+    async def connect_classified_mission_websocket(self, websocket):
+        """
+        Connect a WebSocket to receive notifications about classified missions.
+        """
+
+    @abstractmethod
+    def disconnect_classified_mission_websocket(self, websocket):
+        """
+        Disconnect a WebSocket from receiving notifications about classified missions.
         """
