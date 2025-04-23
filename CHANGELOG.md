@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/FelizCoder/crewstand.backend/compare/v1.4.1...v1.5.0) (2025-04-23)
+
+
+### Features
+
+* **missions:** Enhance mission handling with classification and websockets ([7f0b7b9](https://github.com/FelizCoder/crewstand.backend/commit/7f0b7b9b033c73f4f75e82b803ff368b44f76850)), closes [#85](https://github.com/FelizCoder/crewstand.backend/issues/85)
+
 ## [1.4.1](https://github.com/FelizCoder/crewstand.backend/compare/v1.4.0...v1.4.1) (2025-04-09)
 
 
