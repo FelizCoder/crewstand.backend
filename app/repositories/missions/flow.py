@@ -96,6 +96,10 @@ class FlowMissionRepository(MissionRepository):
 
     async def connect_classified_mission_websocket(self, websocket):
         await self.classified_mission_ws.connect(0, websocket)
+        if self.last_mission:
+            await websocket.send_text(
+                self.last_mission.model_dump_json()
+            )
 
     def disconnect_classified_mission_websocket(self, websocket):
         self.classified_mission_ws.disconnect(0, websocket)
