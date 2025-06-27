@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/FelizCoder/crewstand.backend/compare/v1.5.0...v1.6.0) (2025-06-27)
+
+
+### Features
+
+* **missions:** Send last classified mission data upon classified mission websocket connection ([9eb5ac1](https://github.com/FelizCoder/crewstand.backend/commit/9eb5ac1dc00b273bc0de9510a49528500b9ee0f9)), closes [#96](https://github.com/FelizCoder/crewstand.backend/issues/96)
+
 ## [1.5.0](https://github.com/FelizCoder/crewstand.backend/compare/v1.4.1...v1.5.0) (2025-04-23)
 
 
